@@ -56,17 +56,17 @@ Everything runs inside an **Ubuntu 22.04 LTS Azure Virtual Machine** via **Docke
 Copy and paste this single script into Azure Cloud Shell:
 
 ```bash
-# 1. Clean up and create Resource Group in South India
+# 1. Clean up and create Resource Group in Central India (Allowed Region)
 az group delete --name rg-carbonx-eastus --yes --no-wait 2>/dev/null || true
-az group create --name rg-carbonx-prod --location southindia --output table
+az group create --name rg-carbonx-prod --location centralindia --output table
 
-# 2. Provision Ubuntu 22.04 VM (Standard_B2s or Standard_B1ms)
+# 2. Provision Ubuntu 22.04 VM using Standard_B1ms (1 vCPU, 2GB RAM - in stock)
 az vm create \
   --resource-group rg-carbonx-prod \
   --name vm-carbonx-prod \
-  --location southindia \
+  --location centralindia \
   --image Ubuntu2204 \
-  --size Standard_B2s \
+  --size Standard_B1ms \
   --admin-username azureuser \
   --generate-ssh-keys \
   --output table

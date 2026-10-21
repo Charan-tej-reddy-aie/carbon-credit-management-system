@@ -8,9 +8,9 @@ set -e
 
 # Configuration Variables
 RESOURCE_GROUP="rg-carbonx-prod"
-LOCATION="southindia"    # Compliant with student policy (southindia or centralindia)
+LOCATION="centralindia"  # Permitted by subscription policy
 VM_NAME="vm-carbonx-prod"
-VM_SIZE="Standard_B2s"   # 2 vCPUs, 4GB RAM (or Standard_B1ms if B2s quota full)
+VM_SIZE="Standard_B1ms"  # 1 vCPU, 2GB RAM (in stock & fits student quota)
 ADMIN_USER="azureuser"
 
 echo "=========================================================="
