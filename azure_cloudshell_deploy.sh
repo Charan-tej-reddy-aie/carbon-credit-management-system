@@ -8,9 +8,9 @@ set -e
 
 # Configuration Variables
 RESOURCE_GROUP="rg-carbonx-prod"
-LOCATION="centralindia"  # Nearest region: centralindia, eastus, westeurope, etc.
+LOCATION="southindia"    # Compliant with student policy (southindia or centralindia)
 VM_NAME="vm-carbonx-prod"
-VM_SIZE="Standard_B2s"   # 2 vCPUs, 4GB RAM (eligible under student credits)
+VM_SIZE="Standard_B2s"   # 2 vCPUs, 4GB RAM (or Standard_B1ms if B2s quota full)
 ADMIN_USER="azureuser"
 
 echo "=========================================================="
@@ -22,10 +22,11 @@ echo "[1/4] Creating Resource Group: $RESOURCE_GROUP in $LOCATION..."
 az group create --name $RESOURCE_GROUP --location $LOCATION --output table
 
 # 2. Create Ubuntu Virtual Machine
-echo "[2/4] Provisioning Virtual Machine: $VM_NAME ($VM_SIZE)..."
+echo "[2/4] Provisioning Virtual Machine: $VM_NAME ($VM_SIZE) in $LOCATION..."
 az vm create \
   --resource-group $RESOURCE_GROUP \
   --name $VM_NAME \
+  --location $LOCATION \
   --image Ubuntu2204 \
   --size $VM_SIZE \
   --admin-username $ADMIN_USER \
