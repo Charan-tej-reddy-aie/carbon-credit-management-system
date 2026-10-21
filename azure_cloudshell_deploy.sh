@@ -7,7 +7,7 @@
 set -e
 
 # Configuration Variables
-RESOURCE_GROUP="rg-carbonx-prod"
+RESOURCE_GROUP="rg-carbonx-ci"
 LOCATION="centralindia"  # Permitted by subscription policy
 VM_NAME="vm-carbonx-prod"
 VM_SIZE="Standard_B1ms"  # 1 vCPU, 2GB RAM (in stock & fits student quota)
