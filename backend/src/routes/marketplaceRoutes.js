@@ -1,63 +1,73 @@
 const express = require("express");
-
 const {
     authenticateToken,
     authorizeRoles
 } = require("../middleware/authMiddleware");
-
 const {
     getMarketplaceListings,
     getMarketplaceListingById,
     createListing,
     purchaseCredits,
     getMyListings,
-    getMyTransactions
+    getMySellableCredits,
+    getMyTransactions,
+    getMyCreditSummary,
+    requestPriceChange
 } = require("../controllers/marketplaceController");
 
 const router = express.Router();
 
-// Public marketplace listings
+router.get("/", getMarketplaceListings);
+
 router.get(
-    "/",
-    getMarketplaceListings
+    "/credit-summary",
+    authenticateToken,
+    authorizeRoles("COMPANY"),
+    getMyCreditSummary
 );
 
-// Seller's own listings
+router.get(
+    "/my-sellable-credits",
+    authenticateToken,
+    authorizeRoles("COMPANY"),
+    getMySellableCredits
+);
+
 router.get(
     "/my-listings",
     authenticateToken,
-    authorizeRoles("SELLER"),
+    authorizeRoles("COMPANY"),
     getMyListings
 );
 
-// User's transactions
 router.get(
     "/my-transactions",
     authenticateToken,
-    authorizeRoles("BUYER", "SELLER"),
+    authorizeRoles("COMPANY"),
     getMyTransactions
 );
 
-// Create marketplace listing
 router.post(
     "/list",
     authenticateToken,
-    authorizeRoles("SELLER"),
+    authorizeRoles("COMPANY"),
     createListing
 );
 
-// Purchase carbon credits
 router.post(
     "/purchase",
     authenticateToken,
-    authorizeRoles("BUYER"),
+    authorizeRoles("COMPANY"),
     purchaseCredits
 );
 
-// Get one listing
-router.get(
-    "/:id",
-    getMarketplaceListingById
+router.post(
+    "/price-request",
+    authenticateToken,
+    authorizeRoles("COMPANY"),
+    requestPriceChange
 );
+
+router.get("/:id", getMarketplaceListingById);
 
 module.exports = router;

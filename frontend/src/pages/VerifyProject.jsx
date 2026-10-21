@@ -1,178 +1,564 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+    useNavigate,
+    useParams,
+    useSearchParams
+} from "react-router-dom";
+
 import api from "../services/api";
 import LoadingSpinner from "../components/LoadingSpinner";
 
+
 function VerifyProject() {
+
     const { projectId } = useParams();
+
+    const [searchParams] =
+        useSearchParams();
+
     const navigate = useNavigate();
 
-    const [project, setProject] = useState(null);
 
-    const [verifiedCo2, setVerifiedCo2] = useState("");
-    const [status, setStatus] = useState("APPROVED");
-    const [remarks, setRemarks] = useState("");
+    /* =====================================================
+       NOTIFICATION ID
+       ===================================================== */
 
-    const [loading, setLoading] = useState(true);
-    const [submitting, setSubmitting] = useState(false);
+    const notificationId =
+        searchParams.get("notification");
 
-    const [error, setError] = useState("");
-    const [message, setMessage] = useState("");
+
+    /* =====================================================
+       STATE
+       ===================================================== */
+
+    const [project, setProject] =
+        useState(null);
+
+    const [notification, setNotification] =
+        useState(null);
+
+    const [verifiedCo2, setVerifiedCo2] =
+        useState("");
+
+    const [creditsUsed, setCreditsUsed] =
+        useState("");
+
+    const [status, setStatus] =
+        useState("APPROVED");
+
+    const [remarks, setRemarks] =
+        useState("");
+
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [submitting, setSubmitting] =
+        useState(false);
+
+    const [error, setError] =
+        useState("");
+
+    const [message, setMessage] =
+        useState("");
+
+
+    /* =====================================================
+       COMPLETION REVIEW CHECK
+       ===================================================== */
+
+    const isCompletionReview =
+        notification?.notification_type ===
+        "COMPLETION_REVIEW";
+
+
+    /* =====================================================
+       LOAD PROJECT + NOTIFICATION
+       ===================================================== */
 
     useEffect(() => {
-        const fetchProject = async () => {
+
+        const fetchData = async () => {
+
             try {
-                const response = await api.get(
-                    `/projects/${projectId}`
+
+                setLoading(true);
+                setError("");
+
+
+                /* -----------------------------------------
+                   PROJECT ID CHECK
+                   ----------------------------------------- */
+
+                if (!projectId) {
+
+                    throw new Error(
+                        "Project ID is required"
+                    );
+                }
+
+
+                /* -----------------------------------------
+                   NOTIFICATION ID CHECK
+                   ----------------------------------------- */
+
+                if (!notificationId) {
+
+                    throw new Error(
+                        "Verification notification is missing"
+                    );
+                }
+
+
+                /* -----------------------------------------
+                   GET PENDING NOTIFICATIONS
+                   ----------------------------------------- */
+
+                const response =
+                    await api.get(
+                        "/verifications/pending"
+                    );
+
+
+                const notifications =
+                    response.data.data || [];
+
+
+                /* -----------------------------------------
+                   FIND CURRENT NOTIFICATION
+                   ----------------------------------------- */
+
+                const currentNotification =
+                    notifications.find(
+                        (item) =>
+                            String(
+                                item.notification_id
+                            ) ===
+                            String(
+                                notificationId
+                            ) &&
+                            String(
+                                item.project_id
+                            ) ===
+                            String(
+                                projectId
+                            )
+                    );
+
+
+                if (!currentNotification) {
+
+                    throw new Error(
+                        "Verification notification not found or it is no longer pending"
+                    );
+                }
+
+
+                /* -----------------------------------------
+                   STORE NOTIFICATION
+                   ----------------------------------------- */
+
+                setNotification(
+                    currentNotification
                 );
 
-                const projectData = response.data.data;
 
-                setProject(projectData);
+                /* -----------------------------------------
+                   BUILD PROJECT OBJECT
+                   ----------------------------------------- */
+
+                const projectData = {
+
+                    project_id:
+                        currentNotification.project_id,
+
+                    project_name:
+                        currentNotification.project_name,
+
+                    project_type:
+                        currentNotification.project_type,
+
+                    description:
+                        currentNotification.description,
+
+                    location:
+                        currentNotification.location,
+
+                    estimated_co2_reduction:
+                        currentNotification.estimated_co2_reduction,
+
+                    start_date:
+                        currentNotification.start_date,
+
+                    end_date:
+                        currentNotification.end_date,
+
+                    status:
+                        currentNotification.status,
+
+                    company_name:
+                        currentNotification.company_name,
+
+                    owner_name:
+                        currentNotification.company_owner
+                };
+
+
+                setProject(
+                    projectData
+                );
+
+
+                /* -----------------------------------------
+                   DEFAULT VERIFIED CO2
+                   ----------------------------------------- */
 
                 setVerifiedCo2(
-                    projectData.estimated_co2_reduction
+                    currentNotification
+                        .estimated_co2_reduction
                 );
+
+
             } catch (error) {
+
+                console.error(
+                    "Load verification project error:",
+                    error
+                );
+
+
                 setError(
                     error.response?.data?.message ||
-                    "Failed to load project"
+                    error.message ||
+                    "Failed to load verification details"
                 );
+
             } finally {
+
                 setLoading(false);
             }
         };
 
-        fetchProject();
-    }, [projectId]);
+
+        fetchData();
+
+    }, [
+        projectId,
+        notificationId
+    ]);
+
+
+    /* =====================================================
+       SUBMIT VERIFICATION
+       ===================================================== */
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
+
 
         setError("");
         setMessage("");
 
-        const verifiedValue = Number(verifiedCo2);
-        const estimatedValue = Number(
-            project?.estimated_co2_reduction
-        );
 
-        // Frontend validation
-        if (verifiedValue <= 0) {
+        /* -----------------------------------------------
+           NOTIFICATION CHECK
+           ----------------------------------------------- */
+
+        if (!notificationId) {
+
             setError(
-                "Verified CO₂ reduction must be greater than zero."
+                "Verification notification is missing."
             );
+
             return;
         }
 
-        if (verifiedValue > estimatedValue) {
+
+        /* -----------------------------------------------
+           PROJECT CHECK
+           ----------------------------------------------- */
+
+        if (!projectId) {
+
             setError(
-                "Verified CO₂ reduction cannot exceed the estimated reduction."
+                "Project ID is required."
             );
+
             return;
         }
+
+
+        /* -----------------------------------------------
+           VERIFIED CO2
+           ----------------------------------------------- */
+
+        const verifiedValue =
+            Number(verifiedCo2);
+
+
+        if (
+            verifiedCo2 === "" ||
+            !Number.isFinite(
+                verifiedValue
+            ) ||
+            verifiedValue < 0
+        ) {
+
+            setError(
+                "Enter a valid verified CO₂ reduction amount."
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------------
+           COMPLETION CREDIT VALIDATION
+           ----------------------------------------------- */
+
+        let usedCredits = null;
+
+
+        if (isCompletionReview) {
+
+            usedCredits =
+                Number(creditsUsed);
+
+
+            if (
+                creditsUsed === "" ||
+                !Number.isFinite(
+                    usedCredits
+                ) ||
+                usedCredits < 0
+            ) {
+
+                setError(
+                    "Enter a valid number of credits used."
+                );
+
+                return;
+            }
+
+
+            if (
+                usedCredits >
+                verifiedValue
+            ) {
+
+                setError(
+                    "Credits used cannot exceed verified CO₂ reduction."
+                );
+
+                return;
+            }
+        }
+
+
+        /* -----------------------------------------------
+           REMARKS VALIDATION
+           ----------------------------------------------- */
 
         if (!remarks.trim()) {
+
             setError(
                 "Please enter verification remarks."
             );
+
             return;
         }
+
+
+        /* -----------------------------------------------
+           CONFIRMATION
+           ----------------------------------------------- */
 
         const decisionText =
             status === "APPROVED"
                 ? "approve"
                 : "reject";
 
-        const confirmed = window.confirm(
-            `Are you sure you want to ${decisionText} this project?`
-        );
+
+        const confirmed =
+            window.confirm(
+                `Are you sure you want to ${decisionText} this project?`
+            );
+
 
         if (!confirmed) {
             return;
         }
 
+
+        /* -----------------------------------------------
+           SUBMIT
+           ----------------------------------------------- */
+
         setSubmitting(true);
 
+
         try {
-            const response = await api.post(
-                "/verifications",
-                {
-                    project_id: Number(projectId),
-                    verified_co2_reduction: verifiedValue,
-                    status,
-                    remarks: remarks.trim()
-                }
+
+            const response =
+                await api.post(
+                    "/verifications",
+                    {
+                        project_id:
+                            Number(
+                                projectId
+                            ),
+
+                        notification_id:
+                            Number(
+                                notificationId
+                            ),
+
+                        verified_co2_reduction:
+                            verifiedValue,
+
+                        credits_used:
+                            isCompletionReview
+                                ? usedCredits
+                                : null,
+
+                        status,
+
+                        remarks:
+                            remarks.trim()
+                    }
+                );
+
+
+            setMessage(
+                response.data.message ||
+                "Verification completed successfully."
             );
 
-            setMessage(response.data.message);
+
+            /* -----------------------------------------
+               RETURN TO QUEUE
+               ----------------------------------------- */
 
             setTimeout(() => {
-                navigate("/verifications");
+
+                navigate(
+                    "/verifications"
+                );
+
             }, 1200);
 
+
         } catch (error) {
+
+            console.error(
+                "Submit verification error:",
+                error
+            );
+
+
             setError(
                 error.response?.data?.message ||
+                error.message ||
                 "Failed to submit verification"
             );
+
         } finally {
+
             setSubmitting(false);
         }
     };
 
+
+    /* =====================================================
+       LOADING
+       ===================================================== */
+
     if (loading) {
+
         return (
             <LoadingSpinner
-                message="Loading project..."
+                message="Loading verification details..."
             />
         );
     }
 
+
+    /* =====================================================
+       PROJECT NOT FOUND
+       ===================================================== */
+
     if (!project) {
+
         return (
             <div className="page-container">
+
                 <div className="error-message">
-                    {error || "Project not found"}
+                    {error ||
+                        "Project not found"}
                 </div>
+
 
                 <button
                     className="secondary-button"
                     onClick={() =>
-                        navigate("/verifications")
+                        navigate(
+                            "/verifications"
+                        )
                     }
                 >
                     Back to Verification Queue
                 </button>
+
             </div>
         );
     }
 
+
+    /* =====================================================
+       PAGE
+       ===================================================== */
+
     return (
+
         <div className="verification-page">
 
-            {/* Page Header */}
+
+            {/* =================================================
+               HEADER
+               ================================================= */}
+
             <div className="page-header">
 
                 <div>
+
                     <p className="eyebrow">
                         PROJECT VERIFICATION
                     </p>
 
+
                     <h1>
-                        Review Project
+                        {isCompletionReview
+                            ? "Completion Review"
+                            : "Initial Project Approval"}
                     </h1>
 
+
                     <p>
-                        Verify the submitted carbon project
-                        information before making a decision.
+                        {isCompletionReview
+                            ? "Review the completed project and record the credits used."
+                            : "Review the project information before approving the project to begin."}
                     </p>
+
                 </div>
+
 
                 <button
                     className="secondary-button"
                     onClick={() =>
-                        navigate("/verifications")
+                        navigate(
+                            "/verifications"
+                        )
                     }
                 >
                     ← Back to Queue
@@ -180,100 +566,189 @@ function VerifyProject() {
 
             </div>
 
-            {/* Error */}
+
+            {/* =================================================
+               ERROR
+               ================================================= */}
+
             {error && (
+
                 <div className="error-message">
                     {error}
                 </div>
+
             )}
 
-            {/* Success */}
+
+            {/* =================================================
+               SUCCESS
+               ================================================= */}
+
             {message && (
+
                 <div className="success-message">
                     {message}
                 </div>
+
             )}
 
-            {/* Project Information */}
+
+            {/* =================================================
+               MAIN LAYOUT
+               ================================================= */}
+
             <div className="verification-layout">
+
+
+                {/* =================================================
+                   PROJECT DETAILS
+                   ================================================= */}
 
                 <div className="project-details-card">
 
                     <div className="card-header">
+
                         <div>
+
                             <p className="eyebrow">
                                 PROJECT DETAILS
                             </p>
 
+
                             <h2>
                                 {project.project_name}
                             </h2>
+
                         </div>
+
 
                         <span className="status-badge submitted">
                             {project.status}
                         </span>
+
                     </div>
+
 
                     <div className="details-grid">
 
+
                         <div className="detail-item">
-                            <span>Project ID</span>
+
+                            <span>
+                                Project ID
+                            </span>
+
                             <strong>
                                 #{project.project_id}
                             </strong>
+
                         </div>
 
+
                         <div className="detail-item">
-                            <span>Project Type</span>
+
+                            <span>
+                                Project Type
+                            </span>
+
                             <strong>
                                 {project.project_type}
                             </strong>
+
                         </div>
 
+
                         <div className="detail-item">
-                            <span>Project Owner</span>
+
+                            <span>
+                                Company
+                            </span>
+
                             <strong>
-                                {project.owner_name}
+                                {project.company_name ||
+                                    "—"}
                             </strong>
+
                         </div>
 
+
                         <div className="detail-item">
-                            <span>Company</span>
+
+                            <span>
+                                Company Owner
+                            </span>
+
                             <strong>
-                                {project.company_name}
+                                {project.owner_name ||
+                                    "—"}
                             </strong>
+
                         </div>
 
+
                         <div className="detail-item">
-                            <span>Location</span>
+
+                            <span>
+                                Location
+                            </span>
+
                             <strong>
                                 {project.location}
                             </strong>
+
                         </div>
 
-                        <div className="detail-item">
-                            <span>Estimated CO₂ Reduction</span>
-                            <strong>
-                                {project.estimated_co2_reduction}
-                            </strong>
-                        </div>
 
                         <div className="detail-item">
-                            <span>Start Date</span>
+
+                            <span>
+                                Estimated CO₂ Reduction
+                            </span>
+
                             <strong>
-                                {project.start_date}
+                                {
+                                    project.estimated_co2_reduction
+                                }
                             </strong>
+
                         </div>
 
+
                         <div className="detail-item">
-                            <span>End Date</span>
+
+                            <span>
+                                Start Date
+                            </span>
+
                             <strong>
-                                {project.end_date}
+                                {
+                                    project.start_date
+                                }
                             </strong>
+
+                        </div>
+
+
+                        <div className="detail-item">
+
+                            <span>
+                                End Date
+                            </span>
+
+                            <strong>
+                                {
+                                    project.end_date
+                                }
+                            </strong>
+
                         </div>
 
                     </div>
+
+
+                    {/* =================================================
+                       DESCRIPTION
+                       ================================================= */}
 
                     <div className="description-section">
 
@@ -282,33 +757,47 @@ function VerifyProject() {
                         </span>
 
                         <p>
-                            {project.description}
+                            {project.description ||
+                                "No description provided."}
                         </p>
 
                     </div>
 
                 </div>
 
-                {/* Verification Form */}
+
+                {/* =================================================
+                   VERIFICATION FORM
+                   ================================================= */}
+
                 <div className="verification-form-card">
 
                     <div className="card-header">
 
                         <div>
+
                             <p className="eyebrow">
-                                VERIFICATION DECISION
+                                VERIFICATION
                             </p>
 
                             <h2>
-                                Review & Decide
+                                Verification Decision
                             </h2>
+
                         </div>
 
                     </div>
 
-                    <form onSubmit={handleSubmit}>
 
-                        {/* Verified CO2 */}
+                    <form
+                        onSubmit={handleSubmit}
+                    >
+
+
+                        {/* =============================================
+                           VERIFIED CO2
+                           ============================================= */}
+
                         <div className="form-group">
 
                             <label>
@@ -317,71 +806,93 @@ function VerifyProject() {
 
                             <input
                                 type="number"
+                                min="0"
+                                step="0.01"
                                 value={verifiedCo2}
                                 onChange={(e) =>
                                     setVerifiedCo2(
                                         e.target.value
                                     )
                                 }
-                                min="0.01"
-                                max={
-                                    project.estimated_co2_reduction
-                                }
-                                step="0.01"
+                                placeholder="Enter verified CO₂ reduction"
                                 required
                             />
 
-                            <small>
-                                Maximum allowed:{" "}
-                                {
-                                    project.estimated_co2_reduction
-                                }
-                            </small>
-
                         </div>
 
-                        {/* Decision */}
-                        <div className="form-group">
 
-                            <label>
-                                Verification Decision
-                            </label>
+                        {/* =============================================
+                           CREDITS USED
+                           ============================================= */}
 
-                            <div className="decision-options">
+                        {isCompletionReview && (
 
-                                <button
-                                    type="button"
-                                    className={
-                                        status === "APPROVED"
-                                            ? "decision-button active approve"
-                                            : "decision-button"
-                                    }
-                                    onClick={() =>
-                                        setStatus("APPROVED")
-                                    }
-                                >
-                                    ✓ Approve
-                                </button>
+                            <div className="form-group">
 
-                                <button
-                                    type="button"
-                                    className={
-                                        status === "REJECTED"
-                                            ? "decision-button active reject"
-                                            : "decision-button"
+                                <label>
+                                    Credits Used
+                                </label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    value={creditsUsed}
+                                    onChange={(e) =>
+                                        setCreditsUsed(
+                                            e.target.value
+                                        )
                                     }
-                                    onClick={() =>
-                                        setStatus("REJECTED")
-                                    }
-                                >
-                                    × Reject
-                                </button>
+                                    placeholder="Enter credits used"
+                                    required
+                                />
+
+                                <small>
+                                    Credits used cannot exceed
+                                    the verified CO₂ reduction.
+                                </small>
 
                             </div>
 
+                        )}
+
+
+                        {/* =============================================
+                           STATUS
+                           ============================================= */}
+
+                        <div className="form-group">
+
+                            <label>
+                                Decision
+                            </label>
+
+                            <select
+                                value={status}
+                                onChange={(e) =>
+                                    setStatus(
+                                        e.target.value
+                                    )
+                                }
+                            >
+
+                                <option value="APPROVED">
+                                    Approve
+                                </option>
+
+                                <option value="REJECTED">
+                                    Reject
+                                </option>
+
+                            </select>
+
                         </div>
 
-                        {/* Remarks */}
+
+                        {/* =============================================
+                           REMARKS
+                           ============================================= */}
+
                         <div className="form-group">
 
                             <label>
@@ -395,54 +906,30 @@ function VerifyProject() {
                                         e.target.value
                                     )
                                 }
-                                rows="6"
-                                placeholder={
-                                    status === "APPROVED"
-                                        ? "Explain why the project has been approved..."
-                                        : "Explain why the project has been rejected..."
-                                }
+                                placeholder="Enter your verification remarks..."
+                                rows="5"
                                 required
                             />
 
                         </div>
 
-                        {/* Decision Summary */}
-                        <div
-                            className={
-                                status === "APPROVED"
-                                    ? "decision-summary approved-summary"
-                                    : "decision-summary rejected-summary"
-                            }
-                        >
 
-                            <strong>
-                                {status === "APPROVED"
-                                    ? "✓ Project will be APPROVED"
-                                    : "× Project will be REJECTED"}
-                            </strong>
+                        {/* =============================================
+                           SUBMIT
+                           ============================================= */}
 
-                            <p>
-                                Verified CO₂ reduction:{" "}
-                                {verifiedCo2 || "0"}
-                            </p>
-
-                        </div>
-
-                        {/* Submit */}
                         <button
                             type="submit"
-                            className={
-                                status === "APPROVED"
-                                    ? "submit-button approve-submit"
-                                    : "submit-button reject-submit"
-                            }
+                            className="primary-button"
                             disabled={submitting}
                         >
+
                             {submitting
-                                ? "Submitting Verification..."
-                                : status === "APPROVED"
-                                    ? "Approve Project"
-                                    : "Reject Project"}
+                                ? "Submitting..."
+                                : isCompletionReview
+                                    ? "Submit Completion Verification"
+                                    : "Submit Verification"}
+
                         </button>
 
                     </form>
@@ -454,5 +941,6 @@ function VerifyProject() {
         </div>
     );
 }
+
 
 export default VerifyProject;

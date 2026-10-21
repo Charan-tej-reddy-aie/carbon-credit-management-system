@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
@@ -15,9 +15,50 @@ function CreateProject() {
         end_date: ""
     });
 
+    const [creditSummary, setCreditSummary] = useState(null);
+    const [checkingCredits, setCheckingCredits] = useState(true);
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const getToday = () => {
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+        const day = String(
+            now.getDate()
+        ).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    };
+
+    const today = getToday();
+
+    useEffect(() => {
+        const fetchCreditSummary = async () => {
+            try {
+                const response = await api.get(
+                    "/marketplace/credit-summary"
+                );
+
+                setCreditSummary(
+                    response.data.data || null
+                );
+            } catch (error) {
+                setError(
+                    error.response?.data?.message ||
+                    "Unable to check company credit balance."
+                );
+            } finally {
+                setCheckingCredits(false);
+            }
+        };
+
+        fetchCreditSummary();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -37,42 +78,87 @@ function CreateProject() {
         setMessage("");
         setError("");
 
-        if (
-            formData.start_date &&
-            formData.end_date &&
-            new Date(formData.end_date) <=
-                new Date(formData.start_date)
-        ) {
+        if (creditSummary?.credit_difference < 0) {
             setError(
-                "End date must be after the start date."
+                `You have a credit deficit of ${Math.abs(
+                    Number(
+                        creditSummary.credit_difference
+                    )
+                )} credits. Purchase carbon credits before creating a new project.`
             );
+
+            return;
+        }
+
+        if (!formData.start_date) {
+            setError(
+                "Please select a start date."
+            );
+
+            return;
+        }
+
+        if (formData.start_date < today) {
+            setError(
+                "Start date cannot be earlier than today's date."
+            );
+
+            return;
+        }
+
+        if (!formData.end_date) {
+            setError(
+                "Please select an end date."
+            );
+
             return;
         }
 
         if (
-            Number(formData.estimated_co2_reduction) <= 0
+            formData.end_date <=
+            formData.start_date
+        ) {
+            setError(
+                "End date must be after the start date."
+            );
+
+            return;
+        }
+
+        if (
+            Number(
+                formData.estimated_co2_reduction
+            ) <= 0
         ) {
             setError(
                 "Estimated CO₂ reduction must be greater than zero."
             );
+
             return;
         }
 
         setLoading(true);
 
         try {
-            const response = await api.post("/projects", {
-                ...formData,
-                estimated_co2_reduction: Number(
-                    formData.estimated_co2_reduction
-                )
-            });
+            const response = await api.post(
+                "/projects",
+                {
+                    ...formData,
+                    estimated_co2_reduction:
+                        Number(
+                            formData.estimated_co2_reduction
+                        )
+                }
+            );
 
-            setMessage(response.data.message);
+            setMessage(
+                response.data.message
+            );
 
             setTimeout(() => {
                 navigate("/dashboard");
             }, 1000);
+
         } catch (error) {
             setError(
                 error.response?.data?.message ||
@@ -83,13 +169,44 @@ function CreateProject() {
         }
     };
 
+    if (checkingCredits) {
+        return (
+            <div className="create-project-page">
+                <div className="page-header">
+                    <p className="eyebrow">
+                        COMPANY PORTAL
+                    </p>
+
+                    <h1>
+                        Create Carbon Project
+                    </h1>
+
+                    <p>
+                        Checking your carbon credit
+                        balance...
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    const creditDifference = Number(
+        creditSummary?.credit_difference || 0
+    );
+
+    const creditsToPurchase = Number(
+        creditSummary?.credits_to_purchase || 0
+    );
+
+    const hasCreditDeficit =
+        creditDifference < 0;
+
     return (
         <div className="create-project-page">
 
-            {/* Page Header */}
             <div className="page-header">
                 <p className="eyebrow">
-                    SELLER PORTAL
+                    COMPANY PORTAL
                 </p>
 
                 <h1>
@@ -97,12 +214,57 @@ function CreateProject() {
                 </h1>
 
                 <p>
-                    Submit a new carbon reduction project
-                    for verification.
+                    Submit a new carbon reduction
+                    project for verification.
                 </p>
             </div>
 
-            {/* Messages */}
+            {hasCreditDeficit && (
+                <div className="credit-alert danger-alert">
+                    <div>
+                        <p className="eyebrow">
+                            PROJECT CREATION BLOCKED
+                        </p>
+
+                        <h2>
+                            Credit Deficit
+                        </h2>
+
+                        <p>
+                            Your company has a
+                            deficit of{" "}
+                            <strong>
+                                {Math.abs(
+                                    creditDifference
+                                )}
+                            </strong>{" "}
+                            carbon credits.
+                        </p>
+
+                        <p>
+                            Purchase at least{" "}
+                            <strong>
+                                {creditsToPurchase}
+                            </strong>{" "}
+                            credits before creating
+                            a new project.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="primary-button"
+                        onClick={() =>
+                            navigate(
+                                "/marketplace"
+                            )
+                        }
+                    >
+                        Buy Credits
+                    </button>
+                </div>
+            )}
+
             {message && (
                 <div className="success-message">
                     {message}
@@ -115,7 +277,27 @@ function CreateProject() {
                 </div>
             )}
 
-            {/* Form */}
+            {!hasCreditDeficit && (
+                <div className="credit-alert positive-alert">
+                    <div>
+                        <p className="eyebrow">
+                            CREDIT STATUS
+                        </p>
+
+                        <h2>
+                            Project Creation Available
+                        </h2>
+
+                        <p>
+                            Your company has
+                            sufficient carbon
+                            credits to create a
+                            new project.
+                        </p>
+                    </div>
+                </div>
+            )}
+
             <div className="create-project-card">
 
                 <div className="form-section-header">
@@ -125,15 +307,15 @@ function CreateProject() {
                         </h2>
 
                         <p>
-                            Provide the details of your
-                            carbon reduction project.
+                            Provide the details of
+                            your carbon reduction
+                            project.
                         </p>
                     </div>
                 </div>
 
                 <form onSubmit={handleSubmit}>
 
-                    {/* Project Name */}
                     <div className="form-group">
                         <label htmlFor="project_name">
                             Project Name
@@ -143,14 +325,18 @@ function CreateProject() {
                             id="project_name"
                             type="text"
                             name="project_name"
-                            value={formData.project_name}
+                            value={
+                                formData.project_name
+                            }
                             onChange={handleChange}
                             placeholder="Example: Wind Carbon Reduction Project"
                             required
+                            disabled={
+                                hasCreditDeficit
+                            }
                         />
                     </div>
 
-                    {/* Type + Location */}
                     <div className="form-row">
 
                         <div className="form-group">
@@ -161,9 +347,16 @@ function CreateProject() {
                             <select
                                 id="project_type"
                                 name="project_type"
-                                value={formData.project_type}
-                                onChange={handleChange}
+                                value={
+                                    formData.project_type
+                                }
+                                onChange={
+                                    handleChange
+                                }
                                 required
+                                disabled={
+                                    hasCreditDeficit
+                                }
                             >
                                 <option value="">
                                     Select project type
@@ -200,16 +393,22 @@ function CreateProject() {
                                 id="location"
                                 type="text"
                                 name="location"
-                                value={formData.location}
-                                onChange={handleChange}
+                                value={
+                                    formData.location
+                                }
+                                onChange={
+                                    handleChange
+                                }
                                 placeholder="Example: Andhra Pradesh, India"
                                 required
+                                disabled={
+                                    hasCreditDeficit
+                                }
                             />
                         </div>
 
                     </div>
 
-                    {/* Description */}
                     <div className="form-group">
                         <label htmlFor="description">
                             Project Description
@@ -218,15 +417,21 @@ function CreateProject() {
                         <textarea
                             id="description"
                             name="description"
-                            value={formData.description}
-                            onChange={handleChange}
+                            value={
+                                formData.description
+                            }
+                            onChange={
+                                handleChange
+                            }
                             rows="6"
                             placeholder="Describe the project, its activities, and how it reduces carbon emissions."
                             required
+                            disabled={
+                                hasCreditDeficit
+                            }
                         />
                     </div>
 
-                    {/* CO2 */}
                     <div className="form-group">
                         <label htmlFor="estimated_co2_reduction">
                             Estimated CO₂ Reduction
@@ -240,11 +445,16 @@ function CreateProject() {
                                 value={
                                     formData.estimated_co2_reduction
                                 }
-                                onChange={handleChange}
+                                onChange={
+                                    handleChange
+                                }
                                 min="0.01"
                                 step="0.01"
                                 placeholder="Example: 5000"
                                 required
+                                disabled={
+                                    hasCreditDeficit
+                                }
                             />
 
                             <span>
@@ -253,13 +463,12 @@ function CreateProject() {
                         </div>
 
                         <small className="field-help">
-                            Enter the estimated amount of
-                            carbon dioxide reduction expected
-                            from this project.
+                            Enter the estimated amount
+                            of carbon dioxide reduction
+                            expected from this project.
                         </small>
                     </div>
 
-                    {/* Dates */}
                     <div className="form-row">
 
                         <div className="form-group">
@@ -271,10 +480,23 @@ function CreateProject() {
                                 id="start_date"
                                 type="date"
                                 name="start_date"
-                                value={formData.start_date}
-                                onChange={handleChange}
+                                value={
+                                    formData.start_date
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                                min={today}
                                 required
+                                disabled={
+                                    hasCreditDeficit
+                                }
                             />
+
+                            <small className="field-help">
+                                Start date cannot be
+                                earlier than today.
+                            </small>
                         </div>
 
                         <div className="form-group">
@@ -286,22 +508,39 @@ function CreateProject() {
                                 id="end_date"
                                 type="date"
                                 name="end_date"
-                                value={formData.end_date}
-                                onChange={handleChange}
+                                value={
+                                    formData.end_date
+                                }
+                                onChange={
+                                    handleChange
+                                }
+                                min={
+                                    formData.start_date ||
+                                    today
+                                }
                                 required
+                                disabled={
+                                    hasCreditDeficit
+                                }
                             />
+
+                            <small className="field-help">
+                                End date must be after
+                                the start date.
+                            </small>
                         </div>
 
                     </div>
 
-                    {/* Actions */}
                     <div className="form-actions">
 
                         <button
                             type="button"
                             className="secondary-button"
                             onClick={() =>
-                                navigate("/dashboard")
+                                navigate(
+                                    "/dashboard"
+                                )
                             }
                             disabled={loading}
                         >
@@ -311,7 +550,10 @@ function CreateProject() {
                         <button
                             type="submit"
                             className="primary-button"
-                            disabled={loading}
+                            disabled={
+                                loading ||
+                                hasCreditDeficit
+                            }
                         >
                             {loading
                                 ? "Submitting..."
@@ -322,6 +564,7 @@ function CreateProject() {
 
                 </form>
             </div>
+
         </div>
     );
 }

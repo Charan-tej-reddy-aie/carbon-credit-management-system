@@ -1,11 +1,10 @@
 const express = require("express");
-
 const {
     authenticateToken,
     authorizeRoles
 } = require("../middleware/authMiddleware");
-
 const {
+    getAllProjects,
     createProject,
     getProjectById,
     getMyProjects,
@@ -13,77 +12,47 @@ const {
     deleteProject
 } = require("../controllers/projectController");
 
-const { pool } = require("../config/database");
-
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-    try {
-        const [projects] = await pool.execute(`
-            SELECT
-                cp.project_id,
-                cp.owner_id,
-                u.full_name AS owner_name,
-                u.company_name,
-                cp.project_name,
-                cp.project_type,
-                cp.description,
-                cp.location,
-                cp.estimated_co2_reduction,
-                cp.start_date,
-                cp.end_date,
-                cp.status
-            FROM carbon_projects cp
-            INNER JOIN users u
-                ON cp.owner_id = u.user_id
-            ORDER BY cp.project_id DESC
-        `);
-
-        res.json({
-            success: true,
-            count: projects.length,
-            data: projects
-        });
-    } catch (error) {
-        console.error(error);
-
-        res.status(500).json({
-            success: false,
-            message: "Failed to retrieve carbon projects"
-        });
-    }
-});
+router.get(
+    "/",
+    authenticateToken,
+    authorizeRoles("COMPANY", "VERIFIER", "ADMIN"),
+    getAllProjects
+);
 
 router.get(
     "/my",
     authenticateToken,
-    authorizeRoles("SELLER"),
+    authorizeRoles("COMPANY"),
     getMyProjects
 );
 
 router.get(
-    "/:id",
+    "/:projectId",
+    authenticateToken,
+    authorizeRoles("COMPANY", "VERIFIER", "ADMIN"),
     getProjectById
 );
 
 router.post(
     "/",
     authenticateToken,
-    authorizeRoles("SELLER"),
+    authorizeRoles("COMPANY"),
     createProject
 );
 
 router.put(
-    "/:id",
+    "/:projectId",
     authenticateToken,
-    authorizeRoles("SELLER"),
+    authorizeRoles("COMPANY"),
     updateProject
 );
 
 router.delete(
-    "/:id",
+    "/:projectId",
     authenticateToken,
-    authorizeRoles("SELLER"),
+    authorizeRoles("COMPANY"),
     deleteProject
 );
 

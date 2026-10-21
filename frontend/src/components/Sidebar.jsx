@@ -1,37 +1,40 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-function Sidebar() {
+function Sidebar({ isOpen = false, onNavigate = () => {} }) {
     const { user } = useAuth();
 
     const role = user?.role;
 
+    const dashboardPath =
+        role === "VERIFIER"
+            ? "/verifier-dashboard"
+            : role === "ADMIN"
+            ? "/admin-dashboard"
+            : "/dashboard";
+
     return (
-        <aside className="sidebar">
+        <aside className={`sidebar${isOpen ? " sidebar-open" : ""}`}>
             <div className="sidebar-section">
                 <p className="sidebar-heading">
                     MAIN MENU
                 </p>
 
                 <NavLink
-                    to={
-                        role === "SELLER"
-                            ? "/dashboard"
-                            : role === "VERIFIER"
-                            ? "/verifier-dashboard"
-                            : "/buyer-dashboard"
-                    }
+                    to={dashboardPath}
                     className="sidebar-link"
+                    onClick={onNavigate}
                 >
                     <span>⌂</span>
                     Dashboard
                 </NavLink>
 
-                {role === "SELLER" && (
+                {role === "COMPANY" && (
                     <>
                         <NavLink
                             to="/projects"
                             className="sidebar-link"
+                            onClick={onNavigate}
                         >
                             <span>▣</span>
                             My Projects
@@ -40,37 +43,15 @@ function Sidebar() {
                         <NavLink
                             to="/projects/create"
                             className="sidebar-link"
+                            onClick={onNavigate}
                         >
                             <span>＋</span>
                             Create Project
                         </NavLink>
 
-                        <NavLink
-                            to="/transactions"
-                            className="sidebar-link"
-                        >
-                            <span>↔</span>
-                            Transactions
-                        </NavLink>
-                    </>
-                )}
-
-                {role === "VERIFIER" && (
-                    <NavLink
-                        to="/verifications"
-                        className="sidebar-link"
-                    >
-                        <span>✓</span>
-                        Verification Queue
-                    </NavLink>
-                )}
-
-                {role === "BUYER" && (
-                    <>
-                        <NavLink
-                            to="/marketplace"
-                            className="sidebar-link"
-                        >
+                        <NavLink to="/credits" className="sidebar-link" onClick={onNavigate}><span>▤</span>My Credits</NavLink>
+                        <NavLink to="/wallet" className="sidebar-link" onClick={onNavigate}><span>◉</span>Wallet Settings</NavLink>
+                        <NavLink to="/marketplace" className="sidebar-link" onClick={onNavigate}>
                             <span>◈</span>
                             Marketplace
                         </NavLink>
@@ -78,10 +59,44 @@ function Sidebar() {
                         <NavLink
                             to="/transactions"
                             className="sidebar-link"
+                            onClick={onNavigate}
                         >
                             <span>↔</span>
                             Transactions
                         </NavLink>
+                        <NavLink to="/blockchain" className="sidebar-link" onClick={onNavigate}>
+                            <span>⛓</span>
+                            Blockchain Explorer
+                        </NavLink>
+                    </>
+                )}
+
+                {role === "VERIFIER" && (
+                    <>
+                        <NavLink to="/verifications" className="sidebar-link" onClick={onNavigate}>
+                            <span>✓</span>
+                            Verification Queue
+                        </NavLink>
+                        <NavLink to="/verifier/pricing" className="sidebar-link" onClick={onNavigate}>
+                            <span>₹</span>
+                            Credit Pricing
+                        </NavLink>
+                        <NavLink to="/market-analytics" className="sidebar-link" onClick={onNavigate}>
+                            <span>◒</span>
+                            Market Analytics
+                        </NavLink>
+                        <NavLink to="/blockchain" className="sidebar-link" onClick={onNavigate}>
+                            <span>⛓</span>
+                            Blockchain Explorer
+                        </NavLink>
+                    </>
+                )}
+                {role === "ADMIN" && (
+                    <>
+                        <NavLink to="/admin-dashboard" className="sidebar-link" onClick={onNavigate}><span>⚙</span>Admin Control Center</NavLink>
+                        <NavLink to="/admin/reports" className="sidebar-link" onClick={onNavigate}><span>▤</span>Reports & Audit</NavLink>
+                        <NavLink to="/market-analytics" className="sidebar-link" onClick={onNavigate}><span>◒</span>Market Analytics</NavLink>
+                        <NavLink to="/blockchain" className="sidebar-link" onClick={onNavigate}><span>⛓</span>Blockchain Explorer</NavLink>
                     </>
                 )}
             </div>

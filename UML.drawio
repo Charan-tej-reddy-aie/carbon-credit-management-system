@@ -1,0 +1,258 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="SK_RWfPVdkQFPrj8gpOa">
+    <mxGraphModel dx="1552" dy="1128" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-9" edge="1" parent="1" source="gYp2vv1kSWK5AZgUOSKm-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="gYp2vv1kSWK5AZgUOSKm-12">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-10" edge="1" parent="1" source="gYp2vv1kSWK5AZgUOSKm-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="gYp2vv1kSWK5AZgUOSKm-15">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="535.29" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-11" edge="1" parent="1" source="gYp2vv1kSWK5AZgUOSKm-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="gYp2vv1kSWK5AZgUOSKm-19">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="535.03" y="300" />
+              <mxPoint x="932.48" y="300" />
+            </Array>
+            <mxPoint x="930.8888346354166" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-2" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="User(Abstract)" vertex="1">
+          <mxGeometry height="220" width="270" x="400" y="20" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-3" parent="gYp2vv1kSWK5AZgUOSKm-2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+user_id:INT(PK)&lt;div&gt;+&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;full_name:VARCHAR&lt;/span&gt;&lt;div&gt;+ email : VARCHAR(Unique)&lt;div&gt;+ password : VARCHAR&lt;/div&gt;&lt;div&gt;+ role : ENUM(ADMIN,COMPANY,VERIFIER)&lt;/div&gt;&lt;div&gt;wallet_address : VARCHAR&lt;/div&gt;&lt;div&gt;account_status : ENUM(ACTIVE, INACTIVE)&lt;/div&gt;&lt;div&gt;created_at : TIMESTAMP&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="124" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-4" parent="gYp2vv1kSWK5AZgUOSKm-2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;div&gt;+ register()&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+ login()&lt;/div&gt;&lt;div&gt;+ logout()&lt;/div&gt;&lt;div&gt;+ updateProfile()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="270" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-6" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=160;height=20;" value="USERS &amp;amp; ROLES" vertex="1">
+          <mxGeometry height="570" width="1050" x="20" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-12" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Company" vertex="1">
+          <mxGeometry height="190" width="270" x="36" y="370" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-13" parent="gYp2vv1kSWK5AZgUOSKm-12" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ company_id:INT(PK)&lt;div&gt;+ company&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;_name:VARCHAR&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+ created_at : TIMESTAMP&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="54" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-14" parent="gYp2vv1kSWK5AZgUOSKm-12" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ createdProject()&lt;div&gt;+ viewCreditBalance()&lt;/div&gt;&lt;div&gt;+ buyCredits()&lt;/div&gt;&lt;div&gt;+ sellCredits()&lt;/div&gt;&lt;div&gt;+ createListing()&lt;/div&gt;&lt;div&gt;+ requestPriceChange()&lt;/div&gt;&lt;div&gt;+ retireCredits&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="270" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-15" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Verifier" vertex="1">
+          <mxGeometry height="150" width="190" x="445" y="380" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-16" parent="gYp2vv1kSWK5AZgUOSKm-15" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ v&lt;span style=&quot;text-align: center;&quot;&gt;erifier&lt;/span&gt;_id : INT(PK,FK)&lt;div&gt;+ expertise_area&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: VARCHAR&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+ license_number : VARCHAR&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="54" width="190" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-17" parent="gYp2vv1kSWK5AZgUOSKm-15" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ verifyProjectStart()&lt;div&gt;+ verifyProjectCompletion&lt;/div&gt;&lt;div&gt;+ setCreditPrice()&lt;/div&gt;&lt;div&gt;+ reviewPriceRequest()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="190" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-18" edge="1" parent="1" source="gYp2vv1kSWK5AZgUOSKm-12" style="endArrow=block;startArrow=block;endFill=1;startFill=1;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="gYp2vv1kSWK5AZgUOSKm-15" value="">
+          <mxGeometry relative="1" width="160" as="geometry">
+            <Array as="points">
+              <mxPoint x="350" y="465" />
+              <mxPoint x="350" y="492.5" />
+            </Array>
+            <mxPoint x="420" y="350" as="sourcePoint" />
+            <mxPoint x="580" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-19" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Verifier" vertex="1">
+          <mxGeometry height="114" width="175" x="845" y="380" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-20" parent="gYp2vv1kSWK5AZgUOSKm-19" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ admin_id : INT(PK,FK)&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+ created_at : TIMESTAMP&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="34" width="175" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-21" parent="gYp2vv1kSWK5AZgUOSKm-19" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ manageUsers()&lt;div&gt;+ manageSystem()&lt;/div&gt;&lt;div&gt;+ viewReports()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="54" width="175" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-22" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Carbon Project" vertex="1">
+          <mxGeometry height="260" width="270" x="50" y="620" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-23" parent="gYp2vv1kSWK5AZgUOSKm-22" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ project_id : INT(PK)&lt;div&gt;+ company_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;div&gt;+ project_name : VARCHAR&lt;div&gt;+ project_type : VARCHAR&lt;/div&gt;&lt;div&gt;+ description : TEXT&lt;/div&gt;&lt;div&gt;+ location : VARCHAR&lt;/div&gt;&lt;div&gt;+ estimated_co2_reduction : DECIMAL(18,2)&lt;/div&gt;&lt;div&gt;+ start_date : DATE&lt;/div&gt;&lt;div&gt;+ end_date : DATE&lt;/div&gt;&lt;div&gt;+ status : ENUM(PENDING, IN_PROGRESS, COMPLETED, CANCELLED)&lt;/div&gt;&lt;div&gt;+ created_at : TIMESTAMP&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="184" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-24" parent="gYp2vv1kSWK5AZgUOSKm-22" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ submit()&lt;div&gt;+ completeProject()&lt;/div&gt;&lt;div&gt;+ cancelProject()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="270" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-25" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="ProjectVerification" vertex="1">
+          <mxGeometry height="260" width="270" x="430" y="630" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-26" parent="gYp2vv1kSWK5AZgUOSKm-25" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ verification_id : INT(PK)&lt;/div&gt;+ project_id : INT(FK)&lt;div&gt;+ verifier_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ verification_stage : ENUM(START_APPROVAL, COMPLETION_REVIEW)&lt;div&gt;&lt;div&gt;+ verified_co2_reduction : DECIMAL(18,2)&lt;/div&gt;&lt;div&gt;+ credits_issued : INT (NULL)&lt;/div&gt;&lt;div&gt;+ status : ENUM(PENDING, APPROVED, REJECTED)&lt;/div&gt;&lt;div&gt;+ remarks : TEXT&lt;/div&gt;&lt;div&gt;+ verified_at : TIMESTAMP (NULL)&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="184" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-27" parent="gYp2vv1kSWK5AZgUOSKm-25" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ approve()&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+ reject()&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+ addRemarks()&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="270" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-28" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="VerificationNotification" vertex="1">
+          <mxGeometry height="220" width="270" x="830" y="630" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-29" parent="gYp2vv1kSWK5AZgUOSKm-28" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ notification_id : INT(PK)&lt;/div&gt;+ project_id : INT(FK)&lt;div&gt;+ verifier_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ notification_type : ENUM(START_APPROVAL, COMPLETION_REVIEW)&lt;/div&gt;&lt;div&gt;+ notification_status : ENUM(PENDING, COMPLETED)&lt;div&gt;&lt;div&gt;+ created_at : TIMESTAMP&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+ completed_at : TIMESTAMP (NULL)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="144" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-30" parent="gYp2vv1kSWK5AZgUOSKm-28" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ createNotification()&lt;div&gt;+ markCompleted()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="270" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-31" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="ProjectCompletionReport" vertex="1">
+          <mxGeometry height="160" width="220" x="460" y="1000" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-32" parent="gYp2vv1kSWK5AZgUOSKm-31" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ completion_id : INT(PK)&lt;/div&gt;+ project_id : INT(FK)&lt;div&gt;+ verifier_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;+ credits_used : INT&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ remarks : TEXT&lt;/div&gt;&lt;div&gt;+ reported_at : TIMESTAMP (NULL)&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="94" width="220" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-33" parent="gYp2vv1kSWK5AZgUOSKm-31" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ submitCompletionReport()&lt;div&gt;+ updateReport()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="220" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-34" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="CreditsUsageReport" vertex="1">
+          <mxGeometry height="140" width="270" x="850" y="990" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-35" parent="gYp2vv1kSWK5AZgUOSKm-34" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ usage_report_id : INT(PK)&lt;/div&gt;&lt;div&gt;+ company_id : INT(FK)&lt;/div&gt;+ project_id : INT(FK)&lt;div&gt;+ completion_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;+ credits_used : INT&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ reported_at : TIMESTAMP (NULL)&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="94" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-36" parent="gYp2vv1kSWK5AZgUOSKm-34" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ recordUsage()" vertex="1">
+          <mxGeometry height="20" width="270" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-39" edge="1" parent="1" source="gYp2vv1kSWK5AZgUOSKm-24" style="endArrow=block;startArrow=block;endFill=1;startFill=1;html=1;rounded=0;exitX=0.409;exitY=1.092;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="gYp2vv1kSWK5AZgUOSKm-32" value="">
+          <mxGeometry relative="1" width="160" as="geometry">
+            <Array as="points">
+              <mxPoint x="160.43" y="1070" />
+            </Array>
+            <mxPoint x="310" y="980" as="sourcePoint" />
+            <mxPoint x="470" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-40" edge="1" parent="1" source="gYp2vv1kSWK5AZgUOSKm-32" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="gYp2vv1kSWK5AZgUOSKm-35" value="">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="690" y="1079.68" as="sourcePoint" />
+            <mxPoint x="770" y="1079.68" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-41" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="671" y="1049" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-42" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="0..*" vertex="1">
+          <mxGeometry height="30" width="30" x="816" y="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-43" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=270;height=20;" value="PROJECT &amp;amp; VERIFICATION WORKFLOW" vertex="1">
+          <mxGeometry height="590" width="1110" x="20" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-44" edge="1" parent="1" source="gYp2vv1kSWK5AZgUOSKm-23" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.005;entryY=0.462;entryDx=0;entryDy=0;entryPerimeter=0;" target="gYp2vv1kSWK5AZgUOSKm-26" value="">
+          <mxGeometry relative="1" width="160" as="geometry">
+            <mxPoint x="790" y="870" as="sourcePoint" />
+            <mxPoint x="430" y="750" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-45" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1" vertex="1">
+          <mxGeometry height="18" width="20" x="315" y="722" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-46" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="0..*" vertex="1">
+          <mxGeometry height="26" width="20" x="398" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-49" edge="1" parent="1" source="gYp2vv1kSWK5AZgUOSKm-26" style="endArrow=block;startArrow=block;endFill=1;startFill=1;html=1;rounded=0;exitX=1.002;exitY=0.351;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.009;entryY=0.444;entryDx=0;entryDy=0;entryPerimeter=0;" target="gYp2vv1kSWK5AZgUOSKm-29" value="">
+          <mxGeometry relative="1" width="160" as="geometry">
+            <mxPoint x="650" y="720" as="sourcePoint" />
+            <mxPoint x="810" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-50" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1" vertex="1">
+          <mxGeometry height="10" width="20" x="706" y="709" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-51" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="0..*" vertex="1">
+          <mxGeometry height="20" width="30" x="790" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-52" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="CreditPriceApproval" vertex="1">
+          <mxGeometry height="220" width="270" x="1360" y="600" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-53" parent="gYp2vv1kSWK5AZgUOSKm-52" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ price_approved_id : INT(PK)&lt;/div&gt;+ project_id : INT(FK)&lt;div&gt;+ verifier_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ price_per_credit : DECIMAL(18,2)&lt;/div&gt;&lt;div&gt;+ currency : VARCHAR&lt;/div&gt;&lt;div&gt;+ status : ENUM(PENDING, APPROVED, REJECTED)&lt;div&gt;&lt;div&gt;+ remarks : TEXT (NULL)&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+ approved_at : TIMESTAMP (NULL)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="144" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-54" parent="gYp2vv1kSWK5AZgUOSKm-52" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ setPrice()&lt;div&gt;+ updatePrice()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="270" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-55" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="PriceChangeRequest" vertex="1">
+          <mxGeometry height="245" width="270" x="1730" y="600" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-56" parent="gYp2vv1kSWK5AZgUOSKm-55" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ request_id : INT(PK)&lt;/div&gt;+ project_id : INT(FK)&lt;div&gt;+ company_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ current_price : DECIMAL(18,2)&lt;/div&gt;&lt;div&gt;+ requested_price : DECIMAL(18,2)&lt;/div&gt;&lt;div&gt;+ status : ENUM(PENDING, APPROVED, REJECTED)&lt;div&gt;&lt;div&gt;+ description : TEXT&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+ request_at : TIMESTAMP&lt;/div&gt;&lt;div&gt;+ approved_at : TIMESTAMP (NULL)&lt;/div&gt;&lt;div&gt;+ reviwer_id : INT(FK)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="169" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-57" parent="gYp2vv1kSWK5AZgUOSKm-55" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ submitRequest()&lt;div&gt;+ approveRequest()&lt;/div&gt;&lt;div&gt;+ rejectRequest()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="270" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-58" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="MarketplaceListing" vertex="1">
+          <mxGeometry height="245" width="270" x="1360" y="921.5" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-59" parent="gYp2vv1kSWK5AZgUOSKm-58" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ listing_id : INT(PK)&lt;/div&gt;+ blockchain_token_id : INT(FK)&lt;div&gt;+ company_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ price_approval_id : DECIMAL(18,2)&lt;/div&gt;&lt;div&gt;+ quantity_listed : INT&lt;/div&gt;&lt;div&gt;+ quatity_avaliable : INT&lt;/div&gt;&lt;div&gt;+ price_per_credit : DECIMAL(18,2)&lt;/div&gt;&lt;div&gt;+ status : ENUM(ACTIVE, SOLD, CANCELLED, EXPRIED)&lt;/div&gt;&lt;div&gt;+ listed_at : TIMESTAMP&lt;/div&gt;&lt;div&gt;+ expires_at : DATE&lt;/div&gt;" vertex="1">
+          <mxGeometry height="169" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-60" parent="gYp2vv1kSWK5AZgUOSKm-58" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ createListing()&lt;div&gt;+ updateListing()&lt;/div&gt;&lt;div&gt;+ cancelListing()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="270" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-61" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="Transaction" vertex="1">
+          <mxGeometry height="290" width="270" x="1710" y="921.5" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-62" parent="gYp2vv1kSWK5AZgUOSKm-61" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ transaction_id : INT(PK)&lt;/div&gt;&lt;div&gt;+ listing_id : INT(FK)&lt;/div&gt;&lt;div&gt;+ seller_company_id : INT(FK)&lt;/div&gt;&lt;div&gt;+ buyer_company_id : INT(FK)&lt;/div&gt;+ blockchain_token_id : INT(FK)&lt;div&gt;+ company_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ total_amount : DECIMAL(18,2)&lt;/div&gt;&lt;div&gt;+ quantity : INT&lt;/div&gt;&lt;div&gt;+ currency : VARCHAR&lt;/div&gt;&lt;div&gt;+ blockchain_tx_hash : VARCHAR&lt;/div&gt;&lt;div&gt;+ price_per_credit : DECIMAL(18,2)&lt;/div&gt;&lt;div&gt;+ transaction_status : ENUM(PENDING,COMPLETED,FAILED,CANCELLED)&lt;/div&gt;&lt;div&gt;+ date : TIMESTAMP&lt;/div&gt;&lt;div&gt;+ transaction_date : TIMESTAMP&lt;/div&gt;" vertex="1">
+          <mxGeometry height="234" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-63" parent="gYp2vv1kSWK5AZgUOSKm-61" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ executeTransaction()" vertex="1">
+          <mxGeometry height="30" width="270" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-67" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="CompanyCreditHolding" vertex="1">
+          <mxGeometry height="170" width="270" x="2170" y="740" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-68" parent="gYp2vv1kSWK5AZgUOSKm-67" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ holding_id : INT(PK)&lt;/div&gt;+ blockchain_token_id : INT(FK)&lt;div&gt;+ company_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;+ credit_id : INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ quatity_owend : INT&lt;/div&gt;&lt;div&gt;+ acquired_date : TIMESTAMP&lt;/div&gt;" vertex="1">
+          <mxGeometry height="104" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-69" parent="gYp2vv1kSWK5AZgUOSKm-67" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ addHolding()&lt;div&gt;+ reduceHolding()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="270" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-70" parent="1" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" value="CreditRetirement" vertex="1">
+          <mxGeometry height="171.5" width="270" x="2160" y="1010" as="geometry">
+            <mxRectangle height="30" width="100" x="310" y="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-71" parent="gYp2vv1kSWK5AZgUOSKm-70" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="&lt;div&gt;+ retirement_id : INT(PK)&lt;/div&gt;+ blockchain_token_id : INT(FK)&lt;div&gt;+ company_id&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;: INT(FK)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;+ reason : VARCHAR&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;+ beneficiary : VARCHAR(NULL)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent;&quot;&gt;+ blockchain_tx_hash : VARCHAR(NULL)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ quatity : INT&lt;/div&gt;&lt;div&gt;+ retired_at : TIMESTAMP&lt;/div&gt;" vertex="1">
+          <mxGeometry height="124" width="270" y="26" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-72" parent="gYp2vv1kSWK5AZgUOSKm-70" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ retireCredits()" vertex="1">
+          <mxGeometry height="21.5" width="270" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="gYp2vv1kSWK5AZgUOSKm-73" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=300;height=30;" value="MARCKETPLACE &amp;amp; TRANSACTION" vertex="1">
+          <mxGeometry height="703.5" width="1210" x="1300" y="540" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,628 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+.carbon-login {
+    --carbon-green: #176c46;
+    --carbon-deep: #104d34;
+    --carbon-text: #18372a;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 130px 20px 115px;
+    background-color: #dce9df;
+    background-image: url("/carbonx-environment.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: "DM Sans", "Segoe UI", sans-serif;
+    color: var(--carbon-text);
+}
+
+.carbon-login *,
+.carbon-login *::before,
+.carbon-login *::after {
+    box-sizing: border-box;
+}
+
+.carbon-login-overlay {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(18, 41, 28, .16),
+            rgba(239, 247, 238, .13) 34%,
+            rgba(248, 250, 242, .12) 65%,
+            rgba(18, 48, 29, .12)
+        ),
+        linear-gradient(
+            0deg,
+            rgba(8, 39, 25, .28),
+            transparent 25%,
+            transparent 78%,
+            rgba(246, 249, 241, .12)
+        );
+}
+
+.carbon-brand {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.carbon-brand-mark {
+    display: grid;
+    width: 47px;
+    height: 47px;
+    place-items: center;
+    color: #218151;
+}
+
+.carbon-brand-mark svg {
+    width: 100%;
+    height: 100%;
+}
+
+.carbon-brand h1 {
+    margin: 0;
+    color: #142a1e;
+    font-size: 29px;
+    font-weight: 800;
+    letter-spacing: -1.3px;
+}
+
+.carbon-brand h1 span {
+    color: #27955b;
+}
+
+.carbon-brand p {
+    margin: 2px 0 0;
+    color: #52665a;
+    font-size: 12px;
+    letter-spacing: .1px;
+}
+
+.carbon-login-card {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 480px);
+    padding: 34px 35px 27px;
+    border: 1px solid rgba(255, 255, 255, .85);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, .82);
+    box-shadow:
+        0 22px 65px rgba(18, 50, 30, .15),
+        0 2px 8px rgba(18, 50, 30, .05);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    animation: carbon-card-appear .5s ease-out both;
+}
+
+.carbon-pill {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 19px;
+    padding: 8px 13px;
+    border: 1px solid rgba(40, 126, 76, .09);
+    border-radius: 30px;
+    background: rgba(233, 244, 235, .9);
+    color: #26794b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+}
+
+.carbon-pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #42a96b;
+    box-shadow: 0 0 0 3px rgba(66, 169, 107, .12);
+}
+
+.carbon-login-card h2 {
+    margin: 0;
+    color: #152c20;
+    font-size: 35px;
+    font-weight: 800;
+    letter-spacing: -1.6px;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.carbon-login-card h2 span {
+    color: #21794b;
+}
+
+.carbon-login-description {
+    max-width: 365px;
+    margin: 12px auto 27px;
+    color: #657269;
+    font-size: 13px;
+    line-height: 1.8;
+    text-align: center;
+}
+
+.carbon-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.carbon-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.carbon-field > label {
+    color: #243e2e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.carbon-input-wrap {
+    display: flex;
+    min-width: 0;
+    height: 51px;
+    align-items: center;
+    gap: 12px;
+    padding: 0 14px;
+    border: 1px solid #d6dfd7;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .78);
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.carbon-input-wrap:focus-within {
+    border-color: #4c9869;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(48, 131, 78, .10);
+}
+
+.carbon-input-wrap > svg {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+    fill: none;
+    stroke: #53645a;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.carbon-input-wrap input {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #1c3828;
+    font: inherit;
+    font-size: 13px;
+}
+
+.carbon-input-wrap input::placeholder {
+    color: #909b92;
+}
+
+.carbon-password-toggle {
+    display: grid;
+    width: 30px;
+    height: 34px;
+    flex: 0 0 30px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #68776c;
+    cursor: pointer;
+}
+
+.carbon-password-toggle:hover {
+    background: #edf4ee;
+    color: #176c46;
+}
+
+.carbon-password-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.carbon-signin-button {
+    display: flex;
+    width: 100%;
+    height: 52px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 2px;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(100deg, #26935b, #126442);
+    box-shadow: 0 7px 17px rgba(24, 108, 68, .18);
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.carbon-signin-button span {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.carbon-signin-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(24, 108, 68, .25);
+    filter: brightness(1.04);
+}
+
+.carbon-signin-button:disabled {
+    cursor: wait;
+    opacity: .7;
+}
+
+.carbon-login-error {
+    margin-bottom: 17px;
+    padding: 11px 13px;
+    border: 1px solid #f0d0cb;
+    border-radius: 9px;
+    background: rgba(255, 244, 242, .96);
+    color: #a3352c;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.carbon-register-divider {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin: 20px 0;
+}
+
+.carbon-register-divider span {
+    height: 1px;
+    flex: 1;
+    background: rgba(107, 129, 112, .27);
+}
+
+.carbon-register-divider p {
+    margin: 0;
+    color: #718076;
+    font-size: 11px;
+}
+
+.carbon-register-button {
+    display: flex;
+    width: 100%;
+    min-height: 49px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #43956a;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .22);
+    color: #215d3c;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease;
+}
+
+.carbon-register-button:hover {
+    border-color: #21794b;
+    background: rgba(231, 244, 233, .85);
+}
+
+.carbon-register-button svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.carbon-login-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 23px;
+    color: #586a5e;
+    font-size: 10px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.carbon-login-trust svg {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    fill: none;
+    stroke: #267a4b;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.carbon-environment-label {
+    position: absolute;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 205px;
+    padding: 12px 15px;
+    border: 1px solid rgba(255, 255, 255, .45);
+    border-radius: 13px;
+    background: rgba(255, 255, 255, .55);
+    box-shadow: 0 7px 20px rgba(25, 55, 32, .06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.carbon-environment-label strong,
+.carbon-environment-label small {
+    display: block;
+}
+
+.carbon-environment-label strong {
+    color: #243a2b;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.carbon-environment-label small {
+    margin-top: 4px;
+    color: #66776a;
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.carbon-emissions-label {
+    top: 29%;
+    left: 4%;
+}
+
+.carbon-clean-label {
+    top: 31%;
+    right: 4%;
+}
+
+.carbon-emissions-icon,
+.carbon-clean-icon {
+    display: grid;
+    width: 35px;
+    height: 35px;
+    flex: 0 0 35px;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.carbon-emissions-icon {
+    background: #fff0e8;
+    color: #bc6646;
+}
+
+.carbon-clean-icon {
+    background: #e6f5e8;
+    color: #24824d;
+    font-size: 21px;
+}
+
+.carbon-login-footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    padding: 19px max(5%, calc((100% - 1080px) / 2));
+    border-top: 1px solid rgba(255, 255, 255, .17);
+    background: rgba(14, 45, 30, .77);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.carbon-footer-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 0 14px;
+}
+
+.carbon-footer-item + .carbon-footer-item {
+    border-left: 1px solid rgba(255, 255, 255, .18);
+}
+
+.carbon-footer-symbol {
+    color: #8bdda5;
+    font-size: 25px;
+    line-height: 1;
+}
+
+.carbon-footer-item strong,
+.carbon-footer-item small {
+    display: block;
+}
+
+.carbon-footer-item strong {
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.carbon-footer-item small {
+    margin-top: 4px;
+    color: #c2d5c8;
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+@keyframes carbon-card-appear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 900px) {
+    .carbon-login {
+        padding: 115px 20px 110px;
+    }
+
+    .carbon-environment-label {
+        display: none;
+    }
+
+    .carbon-login-card {
+        max-width: 450px;
+    }
+
+    .carbon-login-footer {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .carbon-footer-item {
+        gap: 7px;
+        padding: 0 8px;
+    }
+}
+
+@media (max-width: 560px) {
+    .carbon-login {
+        min-height: 100vh;
+        padding: 105px 16px 30px;
+        background-position: center;
+    }
+
+    .carbon-login-overlay {
+        background: rgba(238, 246, 237, .35);
+    }
+
+    .carbon-brand {
+        top: 22px;
+    }
+
+    .carbon-brand-mark {
+        width: 38px;
+        height: 38px;
+    }
+
+    .carbon-brand h1 {
+        font-size: 24px;
+    }
+
+    .carbon-login-card {
+        padding: 28px 22px 23px;
+        border-radius: 17px;
+    }
+
+    .carbon-login-card h2 {
+        font-size: 31px;
+    }
+
+    .carbon-login-description {
+        font-size: 12px;
+    }
+
+    .carbon-login-footer {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .carbon-login-card {
+        animation: none;
+    }
+
+    .carbon-login *,
+    .carbon-login *::before,
+    .carbon-login *::after {
+        transition: none !important;
+    }
+}
+
+
+/* Fix registration card size */
+.carbon-register-page .register-container {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.carbon-register-page .register-card {
+    width: 100%;
+    max-width: none;
+    padding: 34px 38px;
+    box-sizing: border-box;
+}
+
+/* Keep two fields side-by-side */
+.carbon-register-page .form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.carbon-register-page .form-group {
+    width: 100%;
+    min-width: 0;
+}
+
+.carbon-register-page .form-group input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 520px) {
+    .carbon-register-page .register-container {
+        max-width: 100%;
+    }
+
+    .carbon-register-page .register-card {
+        padding: 24px 18px;
+    }
+
+    .carbon-register-page .form-row {
+        grid-template-columns: 1fr;
+    }
+}

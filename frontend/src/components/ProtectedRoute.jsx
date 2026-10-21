@@ -1,15 +1,38 @@
-import { NavLink } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-function ProtectedRoute({ children, allowedRoles }) {
-    const { isAuthenticated, user } = useAuth();
+function ProtectedRoute({
+    children,
+    allowedRoles
+}) {
+    const {
+        user,
+        loading
+    } = useAuth();
 
-    if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
+    if (loading) {
+        return <p>Loading...</p>;
     }
 
-    if (allowedRoles && !allowedRoles.includes(user?.role)) {
-        return <Navigate to="/dashboard" replace />;
+    if (!user) {
+        return (
+            <Navigate
+                to="/login"
+                replace
+            />
+        );
+    }
+
+    if (
+        allowedRoles &&
+        !allowedRoles.includes(user.role)
+    ) {
+        return (
+            <Navigate
+                to="/login"
+                replace
+            />
+        );
     }
 
     return children;

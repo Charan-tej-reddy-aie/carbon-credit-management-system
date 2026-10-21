@@ -1,274 +1,39 @@
-import { useEffect, useState } from "react";
+import "../carbonx-dashboard.css";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
-import LoadingSpinner from "../components/LoadingSpinner";
 
+const fmt = (v) => Number(v || 0).toLocaleString("en-IN");
 function VerifierDashboard() {
-    const { user } = useAuth();
-    const navigate = useNavigate();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const load = useCallback(async () => {
+    setLoading(true); setError("");
+    try { const response = await api.get("/projects"); setProjects(Array.isArray(response.data?.data) ? response.data.data : []); }
+    catch (e) { setError(e.response?.data?.message || "Could not load verification statistics."); }
+    finally { setLoading(false); }
+  }, []);
+  useEffect(() => { load(); }, [load]);
+  const pending = projects.filter(p => String(p.status).toUpperCase() === "SUBMITTED");
+  const approved = projects.filter(p => String(p.status).toUpperCase() === "APPROVED");
+  const rejected = projects.filter(p => String(p.status).toUpperCase() === "REJECTED");
+  const inReview = projects.filter(p => ["UNDER_REVIEW", "IN_REVIEW", "VERIFICATION_IN_PROGRESS"].includes(String(p.status).toUpperCase()));
+  const recent = [...pending, ...inReview].slice(0, 5);
+  const name = user?.full_name?.trim()?.split(/\s+/)[0] || "Verifier";
 
-    const [projects, setProjects] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-
-    useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const response = await api.get("/projects");
-
-                setProjects(response.data.data || []);
-            } catch (error) {
-                setError(
-                    error.response?.data?.message ||
-                    "Failed to load verification statistics"
-                );
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProjects();
-    }, []);
-
-    const pendingCount = projects.filter(
-        (project) => project.status === "SUBMITTED"
-    ).length;
-
-    const approvedCount = projects.filter(
-        (project) => project.status === "APPROVED"
-    ).length;
-
-    const rejectedCount = projects.filter(
-        (project) => project.status === "REJECTED"
-    ).length;
-
-    return (
-        <div className="verifier-dashboard">
-
-            {/* Header */}
-            <div className="verifier-header">
-                <div>
-                    <p className="eyebrow">
-                        VERIFIER PORTAL
-                    </p>
-
-                    <h1>
-                        Verifier Dashboard
-                    </h1>
-
-                    <p className="verifier-welcome">
-                        Welcome back, {user?.full_name}
-                    </p>
-                </div>
-
-                <button
-                    className="primary-button"
-                    onClick={() =>
-                        navigate("/verifications")
-                    }
-                >
-                    Review Projects
-                </button>
-            </div>
-
-            {/* Organization */}
-            <div className="verifier-company-card">
-
-                <div>
-                    <span>
-                        Organization
-                    </span>
-
-                    <strong>
-                        {user?.company_name || "—"}
-                    </strong>
-                </div>
-
-                <div>
-                    <span>
-                        Account Role
-                    </span>
-
-                    <strong>
-                        {user?.role || "VERIFIER"}
-                    </strong>
-                </div>
-
-            </div>
-
-            {/* Loading */}
-            {loading && (
-                <LoadingSpinner
-                    message="Loading verification statistics..."
-                />
-            )}
-
-            {/* Error */}
-            {error && (
-                <div className="error-message">
-                    {error}
-                </div>
-            )}
-
-            {/* Statistics */}
-            {!loading && !error && (
-                <div className="stats-grid">
-
-                    {/* Pending */}
-                    <div className="stat-card">
-
-                        <div className="stat-icon pending-icon">
-                            !
-                        </div>
-
-                        <div>
-                            <span>
-                                Pending Reviews
-                            </span>
-
-                            <strong>
-                                {pendingCount}
-                            </strong>
-                        </div>
-
-                    </div>
-
-                    {/* Approved */}
-                    <div className="stat-card">
-
-                        <div className="stat-icon approved-icon">
-                            ✓
-                        </div>
-
-                        <div>
-                            <span>
-                                Approved
-                            </span>
-
-                            <strong>
-                                {approvedCount}
-                            </strong>
-                        </div>
-
-                    </div>
-
-                    {/* Rejected */}
-                    <div className="stat-card">
-
-                        <div className="stat-icon rejected-icon">
-                            ×
-                        </div>
-
-                        <div>
-                            <span>
-                                Rejected
-                            </span>
-
-                            <strong>
-                                {rejectedCount}
-                            </strong>
-                        </div>
-
-                    </div>
-
-                    {/* Verification Center */}
-                    <div className="stat-card">
-
-                        <div className="stat-icon">
-                            V
-                        </div>
-
-                        <div>
-                            <span>
-                                Verification Center
-                            </span>
-
-                            <strong>
-                                Open
-                            </strong>
-                        </div>
-
-                    </div>
-
-                </div>
-            )}
-
-            {/* Verification action */}
-            <div className="verification-action-card">
-
-                <div className="verification-action-content">
-
-                    <div className="verification-icon">
-                        ✓
-                    </div>
-
-                    <div>
-                        <h2>
-                            Project Verification
-                        </h2>
-
-                        <p>
-                            Review submitted carbon projects,
-                            verify their information, and record
-                            your verification decision.
-                        </p>
-                    </div>
-
-                </div>
-
-                <button
-                    className="primary-button"
-                    onClick={() =>
-                        navigate("/verifications")
-                    }
-                >
-                    Open Verification Queue
-                </button>
-
-            </div>
-
-            {/* Information */}
-            <div className="verification-info-grid">
-
-                <div className="content-card">
-                    <h3>
-                        Your Role
-                    </h3>
-
-                    <p>
-                        As a verifier, you review carbon
-                        reduction projects submitted by
-                        sellers before credits can proceed
-                        through the verification process.
-                    </p>
-                </div>
-
-                <div className="content-card">
-                    <h3>
-                        Next Step
-                    </h3>
-
-                    <p>
-                        Open the verification queue to see
-                        submitted projects and review their
-                        details.
-                    </p>
-
-                    <button
-                        className="secondary-button"
-                        onClick={() =>
-                            navigate("/verifications")
-                        }
-                    >
-                        Go to Verification Queue
-                    </button>
-                </div>
-
-            </div>
-
-        </div>
-    );
+  return <div className="cx-dashboard cx-verifier-dashboard">
+    <header className="cx-dash-header"><div><div className="cx-overline"><span className="cx-live-dot" /> VERIFICATION WORKSPACE</div><h1>Review with confidence<span className="cx-title-period">.</span></h1><p>Good day, <strong>{name}</strong>. Your decisions help protect the integrity of the carbon market.</p></div><div className="cx-header-actions"><button className="cx-button cx-button-light" onClick={load}>↻ <span>Refresh</span></button><button className="cx-button cx-button-dark" onClick={() => navigate("/verifications")}>Open review queue <span>→</span></button></div></header>
+    {error && <div className="cx-alert cx-alert-error"><span>!</span>{error}<button onClick={() => setError("")} aria-label="Dismiss">×</button></div>}
+    <section className="cx-verifier-hero"><div className="cx-verifier-hero-copy"><span className="cx-hero-chip">TRUST THROUGH VERIFICATION</span><h2>Good data.<br /><em>Better decisions.</em></h2><p>Review submitted projects, validate reported impact, and help ensure every issued credit is backed by credible evidence.</p><button className="cx-button cx-button-hero" onClick={() => navigate("/verifications")}>Start reviewing <span>→</span></button></div><div className="cx-review-illustration" aria-hidden="true"><div className="cx-review-circle circle-one"/><div className="cx-review-circle circle-two"/><div className="cx-review-document"><div className="cx-document-top"><span>CO₂</span><span>PROJECT REVIEW</span></div><div className="cx-document-line line-wide"/><div className="cx-document-line"/><div className="cx-document-line line-short"/><div className="cx-document-stamp">✓<small>VERIFIED</small></div></div><span className="cx-review-spark spark-one">✦</span><span className="cx-review-spark spark-two">✳</span></div><div className="cx-hero-foot"><span><i /> Verification desk</span><span>Accuracy builds trust.</span></div></section>
+    <div className="cx-section-heading"><div><span className="cx-overline">YOUR REVIEW DESK</span><h2>Verification overview</h2></div><span className="cx-muted">{user?.role || "VERIFIER"} account</span></div>
+    <section className="cx-metric-grid cx-verifier-metrics"><article className="cx-metric-card"><div className="cx-metric-icon tone-amber">◷</div><div className="cx-metric-label">Awaiting review</div><div className="cx-metric-value">{loading ? "—" : fmt(pending.length)}</div><div className="cx-metric-foot">Submitted projects</div></article><article className="cx-metric-card"><div className="cx-metric-icon tone-green">✓</div><div className="cx-metric-label">Approved projects</div><div className="cx-metric-value">{loading ? "—" : fmt(approved.length)}</div><div className="cx-metric-foot">Passed verification</div></article><article className="cx-metric-card"><div className="cx-metric-icon tone-violet">↻</div><div className="cx-metric-label">In review</div><div className="cx-metric-value">{loading ? "—" : fmt(inReview.length)}</div><div className="cx-metric-foot">Currently being assessed</div></article><article className="cx-metric-card"><div className="cx-metric-icon tone-slate">×</div><div className="cx-metric-label">Rejected</div><div className="cx-metric-value">{loading ? "—" : fmt(rejected.length)}</div><div className="cx-metric-foot">Did not meet requirements</div></article></section>
+    <section className="cx-verifier-main-grid"><article className="cx-panel cx-review-queue-panel"><div className="cx-panel-heading"><div><span className="cx-overline">PRIORITY WORK</span><h2>Projects needing attention</h2><p>Open a project to review its submitted information and record a decision.</p></div><span className={`cx-queue-count ${pending.length ? "has-items" : ""}`}>{pending.length}</span></div>{loading ? <div className="cx-table-loading">Loading project queue…</div> : recent.length === 0 ? <div className="cx-empty-state"><span>✓</span><strong>No projects waiting for review</strong><p>When companies submit projects, they will appear here.</p></div> : <div className="cx-review-list">{recent.map((p, i) => <div className="cx-review-item" key={p.project_id ?? `${p.project_name}-${i}`}><div className="cx-queue-avatar">{String(p.project_name || "P").slice(0, 1).toUpperCase()}</div><div className="cx-queue-info"><strong>{p.project_name || `Project #${p.project_id}`}</strong><span>{p.company_name || p.company || "Company submission"}</span></div><span className={`cx-status-label ${String(p.status || "submitted").toLowerCase()}`}>{String(p.status || "SUBMITTED").replaceAll("_", " ")}</span><button className="cx-icon-button" title="Open verification queue" onClick={() => navigate("/verifications")}>→</button></div>)}<button className="cx-queue-footer-link" onClick={() => navigate("/verifications")}>View full verification queue <span>→</span></button></div>}</article>
+      <aside className="cx-verifier-side"><article className="cx-panel cx-integrity-card"><div className="cx-integrity-emblem">✓</div><span className="cx-overline">YOUR MISSION</span><h2>Protect the integrity of every credit.</h2><p>Consistent, evidence-based reviews help prevent over-crediting and strengthen trust in the marketplace.</p><div className="cx-integrity-rule"/><div className="cx-integrity-meta"><span>Review standard</span><strong>Evidence first</strong></div></article><article className="cx-panel cx-shortcuts-panel"><div className="cx-panel-heading"><div><span className="cx-overline">TOOLS</span><h2>Quick access</h2></div></div><button className="cx-shortcut-row" onClick={() => navigate("/verifications")}><span className="cx-shortcut-icon">☷</span><span><strong>Verification queue</strong><small>Review submitted projects</small></span><b>→</b></button><button className="cx-shortcut-row" onClick={() => navigate("/verifier/pricing")}><span className="cx-shortcut-icon">₹</span><span><strong>Credit pricing</strong><small>Review proposed pricing</small></span><b>→</b></button><button className="cx-shortcut-row" onClick={() => navigate("/market-analytics")}><span className="cx-shortcut-icon">⌁</span><span><strong>Market analytics</strong><small>View market indicators</small></span><b>→</b></button></article></aside></section>
+    <footer className="cx-dash-footer"><span><i /> Independent verification matters</span><span>Project counts reflect data returned by the connected backend.</span></footer>
+  </div>;
 }
-
 export default VerifierDashboard;

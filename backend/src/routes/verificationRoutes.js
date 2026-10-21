@@ -1,14 +1,13 @@
 const express = require("express");
-
 const {
     authenticateToken,
     authorizeRoles
 } = require("../middleware/authMiddleware");
-
 const {
     createVerification,
     getVerifications,
-    getVerificationByProject
+    getVerificationByProject,
+    getPendingNotifications
 } = require("../controllers/verificationController");
 
 const router = express.Router();
@@ -21,15 +20,23 @@ router.get(
 );
 
 router.get(
+    "/pending",
+    authenticateToken,
+    authorizeRoles("VERIFIER"),
+    getPendingNotifications
+);
+
+router.get(
     "/project/:projectId",
     authenticateToken,
+    authorizeRoles("ADMIN", "VERIFIER"),
     getVerificationByProject
 );
 
 router.post(
     "/",
     authenticateToken,
-    authorizeRoles("ADMIN", "VERIFIER"),
+    authorizeRoles("VERIFIER"),
     createVerification
 );
 

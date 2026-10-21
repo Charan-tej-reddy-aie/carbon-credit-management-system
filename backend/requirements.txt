@@ -1,0 +1,77 @@
+CarbonX — Project Requirements
+
+IMPORTANT
+
+CarbonX is a Node.js + React/Vite + MySQL project. Python’s pip
+requirements.txt format is not used to install this application’s
+dependencies. The authoritative dependency manifests are package.json
+files in the backend and frontend folders.
+
+1. Software prerequisites
+
+-   Node.js: use Node.js 22 LTS (or another version supported by the
+    installed Vite release).
+-   npm: installed with Node.js.
+-   MySQL Server: compatible with the project’s MySQL schema and stored
+    procedures.
+-   Web browser: current Chrome, Edge, or Firefox.
+
+2. Backend dependencies
+
+Location: backend/package.json
+
+Runtime dependencies: - bcryptjs ^3.0.3 - cors ^2.8.6 - dotenv ^17.4.2 -
+express ^5.2.1 - jsonwebtoken ^9.0.3 - mysql2 ^3.23.3
+
+Development dependency: - nodemon ^3.1.14
+
+Install and run: cd backend npm install npm start
+
+Development mode: npm run dev
+
+3. Frontend dependencies
+
+Location: frontend/package.json
+
+Runtime dependencies: - react ^19.2.8 - react-dom ^19.2.8 -
+react-router-dom ^7.18.2 - axios ^1.12.2
+
+Development dependencies: - @types/react ^19.2.17 - @types/react-dom
+^19.2.3 - @vitejs/plugin-react ^6.0.4 - oxlint ^1.75.0 - vite ^8.2.0
+
+Install and run: cd frontend npm install npm run dev
+
+Production build: npm run build
+
+4. Environment configuration
+
+Create/configure backend/.env using the variable names expected by the
+backend database connection and server configuration. Typical settings
+used by this project include:
+
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_USER=your_mysql_username
+    DB_PASSWORD=your_mysql_password
+    DB_NAME=carbon_v2
+    PORT=5000
+    JWT_SECRET=replace_with_a_long_random_secret
+
+Use the exact variable names read by your current backend configuration.
+Do not commit real passwords or JWT secrets to source control.
+
+5. Database requirements
+
+-   MySQL database: carbon_v2
+-   Apply the project’s normalized schema, constraints/indexes, stored
+    procedures/triggers, views, and sample data scripts in the
+    documented order when setting up a fresh database.
+-   Do not rerun schema or sample-data scripts against an existing
+    database unless you intend to reset or modify its data.
+
+6. Is a Python requirements.txt needed?
+
+No Python runtime dependencies are indicated by the current CarbonX
+backend/frontend manifests. Do not run ‘pip install -r requirements.txt’
+for the main application. Use the backend and frontend package.json
+files with ‘npm install’ instead.

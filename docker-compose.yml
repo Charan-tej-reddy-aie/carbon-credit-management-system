@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # ========================================================
+  # 1. Relational Database Tier: MySQL 8.0
+  # ========================================================
+  mysql:
+    image: mysql:8.0
+    container_name: carbonx_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: CarbonX@Root2026
+      MYSQL_DATABASE: carbon_v2
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --log_bin_trust_function_creators=1
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pCarbonX@Root2026"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - carbonx_net
+
+  # ========================================================
+  # 2. Application Gateway Tier: Node.js Express API
+  # ========================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: carbonx_backend
+    restart: always
+    environment:
+      PORT: 5000
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: CarbonX@Root2026
+      DB_NAME: carbon_v2
+      DB_PORT: 3306
+      DB_SSL: "false"
+      JWT_SECRET: carbonx_jwt_secret_production_2026
+      NODE_ENV: production
+    ports:
+      - "5000:5000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - carbonx_net
+
+  # ========================================================
+  # 3. Presentation / Client Tier: React + Nginx Reverse Proxy
+  # ========================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: carbonx_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - carbonx_net
+
+networks:
+  carbonx_net:
+    driver: bridge
+
+volumes:
+  mysql_data:

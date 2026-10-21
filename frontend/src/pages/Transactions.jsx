@@ -1,11 +1,14 @@
+import "../carbonx-trading.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import LoadingSpinner from "../components/LoadingSpinner";
 import StatusBadge from "../components/StatusBadge";
 
 function Transactions() {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,10 +20,7 @@ function Transactions() {
                 const response = await api.get(
                     "/marketplace/my-transactions"
                 );
-
-                setTransactions(
-                    response.data.data || []
-                );
+                setTransactions(response.data.data || []);
             } catch (error) {
                 setError(
                     error.response?.data?.message ||
@@ -34,168 +34,119 @@ function Transactions() {
         fetchTransactions();
     }, []);
 
-    const totalCredits = transactions.reduce(
-        (total, transaction) =>
-            total + Number(transaction.quantity || 0),
+    const purchases = transactions.filter(
+        (transaction) =>
+            Number(transaction.buyer_id) === Number(user?.user_id)
+    );
+
+    const sales = transactions.filter(
+        (transaction) =>
+            Number(transaction.seller_id) === Number(user?.user_id)
+    );
+
+    const totalPurchased = purchases.reduce(
+        (total, transaction) => total + Number(transaction.quantity || 0),
         0
     );
 
-    const totalAmount = transactions.reduce(
-        (total, transaction) =>
-            total + Number(transaction.total_amount || 0),
+    const totalSold = sales.reduce(
+        (total, transaction) => total + Number(transaction.quantity || 0),
+        0
+    );
+
+    const totalSpent = purchases.reduce(
+        (total, transaction) => total + Number(transaction.total_amount || 0),
+        0
+    );
+
+    const totalRevenue = sales.reduce(
+        (total, transaction) => total + Number(transaction.total_amount || 0),
         0
     );
 
     if (loading) {
-        return (
-            <LoadingSpinner
-                message="Loading transaction history..."
-            />
-        );
+        return <LoadingSpinner message="Loading transaction history..." />;
     }
 
     return (
         <div className="transactions-page">
-
-            {/* Header */}
             <div className="transactions-header">
-
                 <div>
-                    <p className="eyebrow">
-                        BUYER PORTAL
-                    </p>
-
-                    <h1>
-                        Transaction History
-                    </h1>
-
-                    <p>
-                        View all your carbon credit purchases
-                        and transaction details.
-                    </p>
+                    <p className="eyebrow">COMPANY PORTAL</p>
+                    <h1>Transaction History</h1>
+                    <p>View your carbon credit purchases and sales.</p>
                 </div>
 
                 <button
                     className="secondary-button"
-                    onClick={() =>
-                        navigate("/dashboard")
-                    }
+                    onClick={() => navigate("/dashboard")}
                 >
                     ← Dashboard
                 </button>
-
             </div>
 
-            {/* Error */}
-            {error && (
-                <div className="error-message">
-                    {error}
-                </div>
-            )}
+            {error && <div className="error-message">{error}</div>}
 
-            {/* Summary */}
             <div className="transaction-summary">
-
                 <div>
-                    <span>
-                        Total Transactions
-                    </span>
-
-                    <strong>
-                        {transactions.length}
-                    </strong>
+                    <span>Total Transactions</span>
+                    <strong>{transactions.length}</strong>
                 </div>
-
                 <div>
-                    <span>
-                        Credits Purchased
-                    </span>
-
-                    <strong>
-                        {totalCredits}
-                    </strong>
+                    <span>Credits Purchased</span>
+                    <strong>{totalPurchased}</strong>
                 </div>
-
                 <div>
-                    <span>
-                        Total Investment
-                    </span>
-
-                    <strong>
-                        ₹{totalAmount.toFixed(2)}
-                    </strong>
+                    <span>Credits Sold</span>
+                    <strong>{totalSold}</strong>
                 </div>
-
+                <div>
+                    <span>Total Spent</span>
+                    <strong>₹{totalSpent.toFixed(2)}</strong>
+                </div>
+                <div>
+                    <span>Total Revenue</span>
+                    <strong>₹{totalRevenue.toFixed(2)}</strong>
+                </div>
             </div>
 
-            {/* Empty state */}
             {!error && transactions.length === 0 && (
-
                 <div className="transactions-empty">
-
-                    <div className="transactions-empty-icon">
-                        #
-                    </div>
-
-                    <h2>
-                        No Transactions Yet
-                    </h2>
-
-                    <p>
-                        You haven't purchased any carbon
-                        credits yet.
-                    </p>
-
+                    <div className="transactions-empty-icon">#</div>
+                    <h2>No Transactions Yet</h2>
+                    <p>Your company has not made any marketplace transactions yet.</p>
                     <button
                         className="primary-button"
-                        onClick={() =>
-                            navigate("/marketplace")
-                        }
+                        onClick={() => navigate("/marketplace")}
                     >
                         Browse Marketplace
                     </button>
-
                 </div>
-
             )}
 
-            {/* Transactions */}
             {transactions.length > 0 && (
-
                 <div className="transactions-card">
-
                     <div className="transactions-card-header">
-
                         <div>
-                            <p className="eyebrow">
-                                PURCHASE RECORDS
-                            </p>
-
-                            <h2>
-                                Your Transactions
-                            </h2>
+                            <p className="eyebrow">MARKETPLACE ACTIVITY</p>
+                            <h2>Your Transactions</h2>
                         </div>
-
                         <button
                             className="secondary-button"
-                            onClick={() =>
-                                navigate("/marketplace")
-                            }
+                            onClick={() => navigate("/marketplace")}
                         >
                             Buy More Credits
                         </button>
-
                     </div>
 
                     <div className="transaction-table-wrapper">
-
                         <table className="transactions-table">
-
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Type</th>
                                     <th>Project</th>
-                                    <th>Seller</th>
+                                    <th>Counterparty</th>
                                     <th>Quantity</th>
                                     <th>Price / Credit</th>
                                     <th>Total</th>
@@ -203,94 +154,45 @@ function Transactions() {
                                     <th>Date</th>
                                 </tr>
                             </thead>
-
                             <tbody>
+                                {transactions.map((transaction) => {
+                                    const isBuyer =
+                                        Number(transaction.buyer_id) ===
+                                        Number(user?.user_id);
 
-                                {transactions.map(
-                                    (transaction) => (
-                                        <tr
-                                            key={
-                                                transaction.transaction_id
-                                            }
-                                        >
-
+                                    return (
+                                        <tr key={transaction.transaction_id}>
+                                            <td>#{transaction.transaction_id}</td>
+                                            <td>{isBuyer ? "Purchased" : "Sold"}</td>
+                                            <td>{transaction.project_name}</td>
                                             <td>
-                                                <strong>
-                                                    #
-                                                    {
-                                                        transaction.transaction_id
-                                                    }
-                                                </strong>
+                                                {isBuyer
+                                                    ? transaction.seller_company
+                                                    : transaction.buyer_company}
                                             </td>
-
+                                            <td>{transaction.quantity}</td>
                                             <td>
-                                                <strong>
-                                                    {
-                                                        transaction.project_name
-                                                    }
-                                                </strong>
+                                                ₹{Number(transaction.price_per_credit).toFixed(2)}
                                             </td>
-
                                             <td>
-                                                {
-                                                    transaction.seller_name
-                                                }
+                                                ₹{Number(transaction.total_amount).toFixed(2)}
                                             </td>
-
                                             <td>
-                                                {
-                                                    transaction.quantity
-                                                }
+                                                <StatusBadge status={transaction.transaction_status} />
                                             </td>
-
-                                            <td>
-                                                ₹
-                                                {Number(
-                                                    transaction.price_per_credit
-                                                ).toFixed(2)}
-                                            </td>
-
-                                            <td>
-                                                <strong>
-                                                    ₹
-                                                    {Number(
-                                                        transaction.total_amount
-                                                    ).toFixed(2)}
-                                                </strong>
-                                            </td>
-
-                                            <td>
-                                                <StatusBadge
-                                                    status={
-                                                        transaction.transaction_status
-                                                    }
-                                                />
-                                            </td>
-
                                             <td>
                                                 {transaction.transaction_date
-                                                    ? new Date(
-                                                          transaction.transaction_date
-                                                      ).toLocaleDateString(
-                                                          "en-IN"
-                                                      )
+                                                    ? new Date(transaction.transaction_date).toLocaleDateString("en-IN")
                                                     : "-"}
                                             </td>
-
                                         </tr>
-                                    )
-                                )}
-
+                                    );
+                                })}
                             </tbody>
-
                         </table>
-
                     </div>
-
                 </div>
-
             )}
-
         </div>
     );
 }
