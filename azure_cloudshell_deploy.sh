@@ -7,10 +7,10 @@
 set -e
 
 # Configuration Variables
-RESOURCE_GROUP="rg-carbonx-ci"
-LOCATION="centralindia"  # Permitted by subscription policy
+RESOURCE_GROUP="rg-carbonx-kr"
+LOCATION="koreacentral"  # Proven working region from your cloud project
 VM_NAME="vm-carbonx-prod"
-VM_SIZE="Standard_B1ms"  # 1 vCPU, 2GB RAM (in stock & fits student quota)
+VM_SIZE="Standard_B2s"   # 2 vCPUs, 4GB RAM (exact size from cloud project)
 ADMIN_USER="azureuser"
 
 echo "=========================================================="

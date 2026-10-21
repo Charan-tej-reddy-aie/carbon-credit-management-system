@@ -56,27 +56,27 @@ Everything runs inside an **Ubuntu 22.04 LTS Azure Virtual Machine** via **Docke
 Copy and paste this single script into Azure Cloud Shell:
 
 ```bash
-# 1. Create fresh Resource Group in Central India (Allowed Region)
-az group create --name rg-carbonx-ci --location centralindia --output table
+# 1. Create Resource Group in Korea Central (Proven working region)
+az group create --name rg-carbonx-kr --location koreacentral --output table
 
-# 2. Provision Ubuntu 22.04 VM using Standard_B1ms (1 vCPU, 2GB RAM - in stock)
+# 2. Provision Ubuntu 22.04 VM (Standard_B2s: 2 vCPUs, 4GB RAM)
 az vm create \
-  --resource-group rg-carbonx-ci \
+  --resource-group rg-carbonx-kr \
   --name vm-carbonx-prod \
-  --location centralindia \
+  --location koreacentral \
   --image Ubuntu2204 \
-  --size Standard_B1ms \
+  --size Standard_B2s \
   --admin-username azureuser \
   --generate-ssh-keys \
   --output table
 
 # 3. Open Firewall Ports 80 (Web), 443 (HTTPS), and 5000 (API)
-az vm open-port --resource-group rg-carbonx-ci --name vm-carbonx-prod --port 80 --priority 1001 --output table
-az vm open-port --resource-group rg-carbonx-ci --name vm-carbonx-prod --port 443 --priority 1002 --output table
-az vm open-port --resource-group rg-carbonx-ci --name vm-carbonx-prod --port 5000 --priority 1003 --output table
+az vm open-port --resource-group rg-carbonx-kr --name vm-carbonx-prod --port 80 --priority 1001 --output table
+az vm open-port --resource-group rg-carbonx-kr --name vm-carbonx-prod --port 443 --priority 1002 --output table
+az vm open-port --resource-group rg-carbonx-kr --name vm-carbonx-prod --port 5000 --priority 1003 --output table
 
 # 4. Show your Public IP
-az vm show -d -g rg-carbonx-ci -n vm-carbonx-prod --query publicIps -o tsv
+az vm show -d -g rg-carbonx-kr -n vm-carbonx-prod --query publicIps -o tsv
 ```
 
 Azure will output your VM's **Public IP Address** (e.g., `20.219.145.88`).
