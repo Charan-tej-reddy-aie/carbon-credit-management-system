@@ -62,10 +62,18 @@ until sudo docker exec carbonx_mysql mysqladmin ping -h localhost -uroot -pCarbo
 done
 
 echo "MySQL is ready! Importing normalized schema & stored routines..."
-sudo docker exec -i carbonx_mysql mysql -uroot -pCarbonX@Root2026 < database/01_normalized_schema.sql
-sudo docker exec -i carbonx_mysql mysql -uroot -pCarbonX@Root2026 carbon_v2 < database/02_normalized_procedures_triggers.sql
-sudo docker exec -i carbonx_mysql mysql -uroot -pCarbonX@Root2026 carbon_v2 < database/03_normalized_views.sql
-sudo docker exec -i carbonx_mysql mysql -uroot -pCarbonX@Root2026 carbon_v2 < database/04_sample_seed_data.sql
+export MYSQL_PWD='CarbonX@Root2026'
+sudo docker exec -e MYSQL_PWD="$MYSQL_PWD" -i carbonx_mysql mysql -h 127.0.0.1 -u root < database/01_normalized_schema.sql || \
+sudo docker exec -e MYSQL_PWD="$MYSQL_PWD" -i carbonx_mysql mysql -h localhost -u root < database/01_normalized_schema.sql
+
+sudo docker exec -e MYSQL_PWD="$MYSQL_PWD" -i carbonx_mysql mysql -h 127.0.0.1 -u root carbon_v2 < database/02_normalized_procedures_triggers.sql || \
+sudo docker exec -e MYSQL_PWD="$MYSQL_PWD" -i carbonx_mysql mysql -h localhost -u root carbon_v2 < database/02_normalized_procedures_triggers.sql
+
+sudo docker exec -e MYSQL_PWD="$MYSQL_PWD" -i carbonx_mysql mysql -h 127.0.0.1 -u root carbon_v2 < database/03_normalized_views.sql || \
+sudo docker exec -e MYSQL_PWD="$MYSQL_PWD" -i carbonx_mysql mysql -h localhost -u root carbon_v2 < database/03_normalized_views.sql
+
+sudo docker exec -e MYSQL_PWD="$MYSQL_PWD" -i carbonx_mysql mysql -h 127.0.0.1 -u root carbon_v2 < database/04_sample_seed_data.sql || \
+sudo docker exec -e MYSQL_PWD="$MYSQL_PWD" -i carbonx_mysql mysql -h localhost -u root carbon_v2 < database/04_sample_seed_data.sql
 
 echo "Restarting backend to connect with fresh database schema..."
 sudo docker restart carbonx_backend
