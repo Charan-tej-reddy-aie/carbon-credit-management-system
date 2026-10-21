@@ -100,6 +100,14 @@ export function AuthProvider({ children }) {
         password
     ) => {
 
+        /*
+         * Clear any stale tokens before starting new session.
+         */
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("accessToken");
+
         const response =
             await api.post(
                 "/auth/login",

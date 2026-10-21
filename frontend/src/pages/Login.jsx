@@ -156,6 +156,33 @@ function Login() {
                     </button>
                 </form>
 
+                <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                    <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginBottom: '0.6rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Demo Accounts (1-Click Fill)</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+                        <button
+                            type="button"
+                            onClick={() => { setEmail("admin@carbon.com"); setPassword("Admin@123"); setMessage(""); }}
+                            style={{ padding: '0.5rem 0.25rem', background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '8px', color: '#93c5fd', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 500 }}
+                        >
+                            👑 Admin
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => { setEmail("priya@ecoforest.com"); setPassword("Company@123"); setMessage(""); }}
+                            style={{ padding: '0.5rem 0.25rem', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid rgba(34, 197, 94, 0.3)', borderRadius: '8px', color: '#86efac', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 500 }}
+                        >
+                            🏢 Company
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => { setEmail("amit@carbontrust.org"); setPassword("Verifier@123"); setMessage(""); }}
+                            style={{ padding: '0.5rem 0.25rem', background: 'rgba(168, 85, 247, 0.15)', border: '1px solid rgba(168, 85, 247, 0.3)', borderRadius: '8px', color: '#d8b4fe', fontSize: '0.78rem', cursor: 'pointer', fontWeight: 500 }}
+                        >
+                            ✓ Verifier
+                        </button>
+                    </div>
+                </div>
+
                 <div className="carbon-register-divider">
                     <span />
                     <p>OR</p>

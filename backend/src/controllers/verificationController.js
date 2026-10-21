@@ -62,9 +62,8 @@ async function createVerification(req, res) {
             FROM verification_notifications
             WHERE notification_id = ?
               AND project_id = ?
-              AND verifier_id = ?
             LIMIT 1
-        `, [notification_id, project_id, req.user.user_id]);
+        `, [notification_id, project_id]);
 
         if (notifications.length === 0) {
             return res.status(404).json({
@@ -366,11 +365,10 @@ async function getVerificationByProject(req, res) {
                 completed_at
             FROM verification_notifications
             WHERE project_id = ?
-              AND verifier_id = ?
               AND notification_status = 'PENDING'
             ORDER BY notification_id ASC
             LIMIT 1
-        `, [projectId, req.user.user_id]);
+        `, [projectId]);
 
         const [verifications] = await pool.execute(`
             SELECT
@@ -454,10 +452,9 @@ async function getPendingNotifications(req, res) {
                 ON owner.user_id = c.user_id
             INNER JOIN project_types pt
                 ON pt.project_type_id = cp.project_type_id
-            WHERE vn.verifier_id = ?
-              AND vn.notification_status = 'PENDING'
+            WHERE vn.notification_status = 'PENDING'
             ORDER BY vn.created_at ASC
-        `, [req.user.user_id]);
+        `);
 
         return res.json({ success: true, count: notifications.length, data: notifications });
     } catch (error) {

@@ -58,6 +58,7 @@ function authenticateToken(req, res, next) {
         // Attach logged-in user to request and normalize role
         req.user = decoded;
         req.user.role = normalizeRole(req.user.role, req.user.role_id);
+        console.log(`[AUTH TOKEN] path=${req.originalUrl} user_id=${req.user?.user_id} email=${req.user?.email} role=${req.user?.role} role_id=${req.user?.role_id}`);
 
         next();
 
@@ -94,6 +95,7 @@ function authorizeRoles(...allowedRoles) {
         req.user.role = userRole;
 
         if (!userRole || !normalizedAllowed.includes(userRole)) {
+            console.warn(`[AUTH 403 FORBIDDEN] path=${req.originalUrl} method=${req.method} user_id=${req.user?.user_id} email=${req.user?.email} userRole='${userRole}' allowed=${JSON.stringify(normalizedAllowed)} rawRole='${req.user?.role}' role_id=${req.user?.role_id}`);
             return res.status(403).json({
                 success: false,
                 message: "You do not have permission to perform this action"
