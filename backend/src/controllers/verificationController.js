@@ -466,9 +466,90 @@ async function getPendingNotifications(req, res) {
     }
 }
 
+async function getVerificationSummary(req, res) {
+    try {
+        const [pendingCounts] = await pool.execute(`
+            SELECT
+                COUNT(*) AS total_pending,
+                SUM(CASE WHEN notification_type = 'START_APPROVAL' THEN 1 ELSE 0 END) AS pending_start_approvals,
+                SUM(CASE WHEN notification_type = 'COMPLETION_REVIEW' THEN 1 ELSE 0 END) AS pending_completion_reviews
+            FROM verification_notifications
+            WHERE notification_status = 'PENDING'
+        `);
+
+        const [projectCounts] = await pool.execute(`
+            SELECT
+                COUNT(*) AS total_projects,
+                SUM(CASE WHEN status IN ('SUBMITTED', 'DRAFT') THEN 1 ELSE 0 END) AS awaiting_review,
+                SUM(CASE WHEN status IN ('APPROVED', 'IN_PROGRESS', 'COMPLETION_PENDING', 'COMPLETED', 'CREDITS_ISSUED') THEN 1 ELSE 0 END) AS approved_projects,
+                SUM(CASE WHEN status IN ('UNDER_REVIEW', 'COMPLETION_PENDING') THEN 1 ELSE 0 END) AS in_review,
+                SUM(CASE WHEN status = 'REJECTED' THEN 1 ELSE 0 END) AS rejected
+            FROM carbon_projects
+        `);
+
+        const [verificationCounts] = await pool.execute(`
+            SELECT
+                COUNT(*) AS total_verifications,
+                SUM(CASE WHEN status = 'APPROVED' THEN 1 ELSE 0 END) AS approved_verifications,
+                SUM(CASE WHEN status = 'REJECTED' THEN 1 ELSE 0 END) AS rejected_verifications,
+                COALESCE(SUM(verified_co2_reduction), 0) AS total_co2_verified
+            FROM project_verifications
+        `);
+
+        const [priceRequests] = await pool.execute(`
+            SELECT COUNT(*) AS pending_price_requests
+            FROM price_change_requests
+            WHERE status = 'PENDING'
+        `);
+
+        const [recentVerifications] = await pool.execute(`
+            SELECT
+                pv.verification_id,
+                pv.project_id,
+                cp.project_name,
+                c.company_name,
+                pv.verification_stage,
+                pv.verified_co2_reduction,
+                pv.credits_used,
+                pv.status,
+                pv.remarks,
+                pv.verified_at
+            FROM project_verifications pv
+            INNER JOIN carbon_projects cp ON cp.project_id = pv.project_id
+            INNER JOIN companies c ON c.company_id = cp.owner_company_id
+            ORDER BY pv.verification_id DESC
+            LIMIT 5
+        `);
+
+        return res.json({
+            success: true,
+            data: {
+                awaiting_review: Number(pendingCounts[0]?.total_pending || projectCounts[0]?.awaiting_review || 0),
+                pending_start_approvals: Number(pendingCounts[0]?.pending_start_approvals || 0),
+                pending_completion_reviews: Number(pendingCounts[0]?.pending_completion_reviews || 0),
+                approved_projects: Number(projectCounts[0]?.approved_projects || verificationCounts[0]?.approved_verifications || 0),
+                in_review: Number(projectCounts[0]?.in_review || pendingCounts[0]?.pending_completion_reviews || 0),
+                rejected: Number(projectCounts[0]?.rejected || verificationCounts[0]?.rejected_verifications || 0),
+                total_verifications: Number(verificationCounts[0]?.total_verifications || 0),
+                total_co2_verified: Number(verificationCounts[0]?.total_co2_verified || 0),
+                pending_price_requests: Number(priceRequests[0]?.pending_price_requests || 0),
+                total_projects: Number(projectCounts[0]?.total_projects || 0),
+                recent_verifications: recentVerifications
+            }
+        });
+    } catch (error) {
+        console.error("Verification summary error:", error);
+        return res.status(500).json({
+            success: false,
+            message: error.sqlMessage || error.message || "Failed to retrieve verification summary"
+        });
+    }
+}
+
 module.exports = {
     createVerification,
     getVerifications,
     getVerificationByProject,
-    getPendingNotifications
+    getPendingNotifications,
+    getVerificationSummary
 };

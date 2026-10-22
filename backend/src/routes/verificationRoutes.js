@@ -7,10 +7,18 @@ const {
     createVerification,
     getVerifications,
     getVerificationByProject,
-    getPendingNotifications
+    getPendingNotifications,
+    getVerificationSummary
 } = require("../controllers/verificationController");
 
 const router = express.Router();
+
+router.get(
+    "/summary",
+    authenticateToken,
+    authorizeRoles("ADMIN", "VERIFIER"),
+    getVerificationSummary
+);
 
 router.get(
     "/",
